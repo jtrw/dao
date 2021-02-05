@@ -1,5 +1,5 @@
 {
-  "name": "jtrw/DAO",
+  "name": "jtrw/dao",
   "type": "library",
   "description": "Data Access Object for fork with DataBases",
   "keywords": [
@@ -9,7 +9,7 @@
     "DB",
     "Data Base"
   ],
-  "homepage": "https://github.com/jtrw/DAO",
+  "homepage": "https://github.com/jtrw/dao",
   "license": "MIT",
   "authors": [
     {

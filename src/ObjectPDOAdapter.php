@@ -11,10 +11,10 @@ use Jtrw\DAO\Exceptions\DatabaseException;
  * Class ObjectPDOAdapter
  * @package Jtrw\DAO
  */
-class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
+class ObjectPDOAdapter implements DataAccessObjectInterface, PDOInterface
 {
     use PDOHelperTrait;
-    
+
     /**
      *
      */
@@ -27,7 +27,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
      *
      */
     public const TYPE_PGSQL = 'pgsql';
-    
+
     /**
      *
      */
@@ -40,7 +40,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
      *
      */
     public const DEFAULT_PORT_MSSQL = '1433';
-    
+
     /**
      *
      */
@@ -61,7 +61,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
      *
      */
     public const FETCH_ONE = 104;
-    
+
     /**
      *
      */
@@ -74,27 +74,27 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
      *
      */
     private const SQL_OR = ' OR ';
-    
+
     /**
      *
      */
     private const MSG_UNDEFINED_TYPE = "Undefined database type";
-    
+
     /**
      * @var ObjectDriverInterface|mixed
      */
     protected ObjectDriverInterface $driver;
-    
+
     /**
      * @var bool
      */
     protected static bool $_isStartTransaction = false;
-    
+
     /**
      * @var string
      */
     protected string $_dbTableNameDelimiterInColumnName = ".";
-    
+
     /**
      * @var array|string[]
      */
@@ -108,7 +108,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         'CURRENT_TIME',
         'NOW'
     ];
-    
+
     /**
      * ObjectPDOAdapter constructor.
      * @param PDO $db
@@ -117,10 +117,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function __construct(PDO $db)
     {
         $this->setAttributes($db);
-        
+
         $this->driver = $this->_createDriverInstance($db);
     } // end __construct
-    
+
     /**
      * @param object $db
      * @return mixed
@@ -129,7 +129,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _createDriverInstance(object $db)
     {
         $type = $this->getDatabaseType();
-        
+
         $className = ucfirst($type).'ObjectDriver';
         $className = "\Jtrw\DAO\Driver\\".$className;
         if (!class_exists($className)) {
@@ -138,7 +138,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return new $className($db);
     } // end _createDriverInstance
-    
+
     /**
      * @return bool
      */
@@ -146,7 +146,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return self::$_isStartTransaction;
     } // end inTransaction
-    
+
     /**
      * @param string $table
      * @param array $values
@@ -162,7 +162,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $this->getInsertID();
     } // end insert
-    
+
     /**
      * @param string $table
      * @param array $condition
@@ -174,14 +174,14 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         $where = $this->getSqlCondition($condition);
 
         $sql = "DELETE FROM ".$table;
-        
+
         if ($where) {
             $sql .= sprintf(static::SQL_WHERE, implode(static::SQL_AND, $where));
         }
 
         return $this->query($sql);
     } // end delete
-    
+
     /**
      * @param string $table
      * @param array $values
@@ -220,7 +220,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $res;
     } // end massInsert
-    
+
     /**
      * @param array $values
      * @return array
@@ -241,7 +241,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $values;
     } // end getInsertValues
-    
+
     /**
      * @param string $table
      * @param array $values
@@ -255,7 +255,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $this->query($sql);
     } // end update
-    
+
     /**
      * @param string $table
      * @param array $values
@@ -267,7 +267,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         $values = $this->getInsertValues($values);
         $columns = array_keys($values);
-        
+
         foreach ($columns as &$column) {
             $column = $this->quoteColumnName($column);
         }
@@ -284,7 +284,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $sql;
     } // end getInsertSQL
-    
+
     /**
      * @param array $values
      * @param string|null $tableName
@@ -293,11 +293,11 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function getUpdateValues(array $values, string $tableName = null): array
     {
         foreach ($values as $key => &$item) {
-            
+
             if ($tableName) {
                 $key = $tableName.$this->_dbTableNameDelimiterInColumnName.$key;
             }
-            
+
             if (is_null($item)) {
                 $item = $this->quoteColumnName($key)." = NULL";
                 continue;
@@ -311,7 +311,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
             }
 
             $key = $this->quoteColumnName($key);
-            
+
             if (!$this->reservedWords || !in_array($item, $this->reservedWords)) {
                 $item = $key." = ".$this->quote($item);
             } else {
@@ -319,10 +319,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
             }
         }
         unset($item);
-        
+
         return $values;
     } // end getUpdateValues
-    
+
     /**
      * @param string $table
      * @param array $values
@@ -332,7 +332,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function getUpdateSQL(string $table, array $values, array $condition = []): string
     {
         $values = $this->getUpdateValues($values);
-        
+
         $sql = "UPDATE ".$table." SET ".implode(", ", $values);
 
         if (is_array($condition)) {
@@ -364,7 +364,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function getSqlCondition(array $obj = null): array
     {
         $result = [];
-        
+
         if ($obj === null) {
             return $result;
         }
@@ -384,7 +384,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $result;
     } // end getSqlCondition
-    
+
     /**
      * @param string $key
      * @param $item
@@ -393,15 +393,15 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _getConditionResult(string $key, $item): string
     {
         $result = "";
-        
+
         $buffer = explode("&", $key);
         $action = !empty($buffer[1]) ? $buffer[1] : "=";
-    
+
         if ($this->_isNull($item, $buffer)) {
             $result = $buffer[0] . ' IS NULL';
             return $result;
         }
-    
+
         if (in_array($action, ['IN', 'NOT IN'])) {
             $values = [];
             if (!$item) {
@@ -411,19 +411,19 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
             foreach ($item as $val) {
                 $values[] = $this->quote($val);
             }
-        
+
             if ($values) {
                 $result = $buffer[0]." ".$action." (".implode(', ', $values).')';
             }
             return $result;
         }
-    
+
         $resultKey = $this->_getConditionByKey($key, $item);
-    
+
         if ($resultKey) {
             return $resultKey;
         }
-    
+
         $resultCommand = $this->_getSqlConditionByActionCommand($action, $item, $buffer);
         if ($resultCommand) {
             return $resultCommand;
@@ -440,10 +440,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         }
 
         $result = $buffer[0].' '.$action.' '.$item;
-        
+
         return $result;
     } // end _getConditionResult
-    
+
     /**
      * @param string $action
      * @return bool
@@ -459,7 +459,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return in_array(strtolower($action), $actions);
     } // end _isNeedCastValueToStringByAction
-    
+
     /**
      * @param string $key
      * @param $item
@@ -470,14 +470,14 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         if ($key === 'sql_or') {
             return $this->_getSqlConditionOR($item);
         }
-    
+
         if ($key === 'sql_and') {
             return $this->_getSqlConditionAND($item);
         }
-        
+
         return null;
     } // end _getConditionByKey
-    
+
     /**
      * @param string $action
      * @param $item
@@ -488,7 +488,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _getSqlConditionByActionCommand(string $action, $item, array $buffer): string
     {
         $command = strtolower($action);
-        
+
         switch ($command) {
             case 'or_sql':
                 $sql = '('.implode(' OR ', $item).')';
@@ -508,10 +508,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
             default:
                 $sql = '';
         }
-        
+
         return $sql;
     } // end _getSqlConditionByActionCommand
-    
+
     /**
      * @param array $buffer
      * @param array $item
@@ -520,17 +520,17 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _getOrCondition(array $buffer, array $item): string
     {
         list($value, $others) = $item;
-    
+
         $action = empty($buffer[2]) ? '&=' : '&'.$buffer[2];
-    
+
         $condition = [$buffer[0].$action => $value];
         $ors = $this->getSqlCondition($condition);
-    
+
         $others = $this->getSqlCondition($others);
         $conditions = array_merge($ors, $others);
         return '('.implode(static::SQL_OR, $conditions).')';
     } // end _getOrCondition
-    
+
     /**
      * @param array $item
      * @return string
@@ -545,10 +545,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
                 $search[] = implode(static::SQL_AND, $this->getSqlCondition($row));
             }
         }
-    
+
         return implode(static::SQL_AND, $search);
     } // end _getSqlConditionAND
-    
+
     /**
      * @param array $item
      * @return string
@@ -563,10 +563,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
                 $search[] = implode(static::SQL_AND, $this->getSqlCondition($row));
             }
         }
-    
+
         return '(('.implode(' )'.static::SQL_OR.'(', $search).'))';
     } // end _getSqlConditionOR
-    
+
     /**
      * Returns a SOUNDEX condition. Use:
      *
@@ -589,7 +589,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return "SOUNDEX(".$buffer[0].") = SOUNDEX(".$this->quote($item).")";
     } // end _getSoundexCondition
-    
+
     /**
      * Returns a BETWEEN condition. Use:
      *
@@ -622,10 +622,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _getBetweenCondition(array $buffer, $item): string
     {
         $columnName = $this->quoteColumnName($buffer[0]);
-        
+
         if (is_array($item)) {
             if (count($item) == 1) {
-                
+
                 if (array_key_exists(0, $item)) {
                     $operation = ' >= ';
                     $value = $item[0];
@@ -637,20 +637,20 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
                         "Syntax error into BETWEEN condition"
                     );
                 }
-                
+
                 $condition = $columnName.$operation.$this->quote($value);
             } else {
                 $condition = $columnName." BETWEEN ".$this->quote($item[0]).
                              static::SQL_AND.$this->quote($item[1]);
             }
-            
+
         } else {
             $condition = $columnName." BETWEEN ".$item;
         }
-        
+
         return $condition;
     } // end _getBetweenCondition
-    
+
     /**
      * @param string $name
      * @return string
@@ -659,7 +659,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return $this->driver->quoteTableName($name);
     } // end quoteTableName
-    
+
     /**
      * @param string $name
      * @return string
@@ -668,7 +668,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return $this->driver->quoteColumnName($name);
     } // end quoteColumnName
-    
+
     /**
      * Returns generate select sql query
      *
@@ -680,11 +680,11 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function getSelectSQL(array $condition, string $sql, array $orderBy = []): string
     {
         $where = $this->getSqlCondition($condition);
-    
+
         if ($where) {
             $sql .=  sprintf(static::SQL_WHERE, implode(static::SQL_AND, $where));
         }
-    
+
         if ($orderBy) {
             $sql .= " ORDER BY ".implode(', ', $orderBy);
         }
@@ -710,7 +710,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     ): array
     {
         $sql = $this->getSelectSQL($condition, $selectSql, $orderBy);
-    
+
         $methods = [
             static::FETCH_ALL   => 'getAll',
             static::FETCH_ROW   => 'getRow',
@@ -718,18 +718,18 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
             static::FETCH_COL   => 'getCol',
             static::FETCH_ONE   => 'getOne',
         ];
-    
+
         if (!isset($methods[$type])) {
             $msg = sprintf('Undefined select type %s', $type);
             throw new DatabaseException($msg, 3005);
         }
-    
+
         if (!is_callable([$this, $methods[$type]])) {
             $msg = sprintf(
                 'Method "%s" was not found in Object.',
                 $methods[$type]
             );
-            
+
             throw new DatabaseException($msg, 3006);
         }
 
@@ -738,7 +738,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         $data = call_user_func_array([$this, $methods[$type]], [$sql]);
         return $data ? $data : [];
     } // end select
-    
+
     /**
      * Returns an array of filter fields
      *
@@ -748,19 +748,19 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     public function getConditionFields(array $search): array
     {
         $fields = [];
-    
+
         foreach ($search as $key => $item) {
             $buffer = explode("&", $key);
-    
+
             $info = explode('.', $buffer[0]);
-    
+
             if (!isset($info[1])) {
                 continue;
             }
-    
+
             $fields[$info[0]][$info[1]] = $buffer[0];
         }
-    
+
         return $fields;
     } // end getConditionFields
 
@@ -798,8 +798,8 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return $this->getDriver()->getTables($this);
     } // end getTables
-    
-    
+
+
     /**
      * @param string $tableName
      * @return array
@@ -808,7 +808,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     {
         return $this->getDriver()->getTableIndexes($this, $tableName);
     } // end getTableIndexes
-    
+
     /**
      * @param bool $isEnable
      * @return bool|void
@@ -835,7 +835,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
 
         return $this->query($sql);
     } // end deleteTable
-    
+
     /**
      * @param string $sql
      * @param array $values
@@ -845,7 +845,7 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
     private function _getUpdateDuplicateSQL(string $sql, array $values): string
     {
         $type = $this->getDatabaseType();
-        
+
         switch ($type) {
             case static::TYPE_MYSQL:
                 $sql .= " ON duplicate KEY UPDATE ";
@@ -869,10 +869,10 @@ class ObjectPDOAdapter implements ObjectAdapterInterface, PDOInterface
         }
 
         $sql .= implode(", ", $rows);
-        
+
         return $sql;
     } // end _getUpdateDuplicateSQL
-    
+
     /**
      * @return ObjectDriverInterface
      */

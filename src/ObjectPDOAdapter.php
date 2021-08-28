@@ -11,7 +11,7 @@ use Jtrw\DAO\Exceptions\DatabaseException;
  * Class ObjectPDOAdapter
  * @package Jtrw\DAO
  */
-class ObjectPDOAdapter implements DataAccessObjectInterface, PDOInterface
+class ObjectPDOAdapter implements DataAccessObjectInterface
 {
     use PDOHelperTrait;
 

@@ -1,7 +1,6 @@
 <?php
 namespace Jtrw\DAO;
 
-
 interface DataAccessObjectFactoryInterface
 {
     public static function factory(object $connection): DataAccessObjectInterface;

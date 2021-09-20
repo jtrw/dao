@@ -436,7 +436,9 @@ class ObjectPDOAdapter implements DataAccessObjectInterface
         }
 
         if (!in_array($item, $this->reservedWords)) {
-            $item = $this->quote($item);
+            if (!is_numeric($item)) {
+                $item = $this->quote($item);
+            }
         }
 
         $result = $buffer[0].' '.$action.' '.$item;

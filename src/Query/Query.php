@@ -2,7 +2,7 @@
 
 namespace Jtrw\DAO\Query;
 
-use Jtrw\DAO\ObjectAdapterInterface;
+use Jtrw\DAO\DataAccessObjectInterface;
 use Jtrw\DAO\Exceptions\DatabaseException;
 
 /**
@@ -12,9 +12,9 @@ use Jtrw\DAO\Exceptions\DatabaseException;
 class Query implements QueryInterface
 {
     /**
-     * @var ObjectAdapterInterface
+     * @var DataAccessObjectInterface
      */
-    protected ObjectAdapterInterface $connection;
+    protected DataAccessObjectInterface $connection;
 
     /**
      * @var array
@@ -60,16 +60,25 @@ class Query implements QueryInterface
      * @var array
      */
     protected array $having = [];
-    
+
     /**
      * Query constructor.
-     * @param ObjectAdapterInterface $connection
+     * @param DataAccessObjectInterface $connection
      */
-    public function __construct(ObjectAdapterInterface $connection)
+    public function __construct(DataAccessObjectInterface $connection)
     {
         $this->connection = $connection;
     } // end __construct
-    
+
+    public function column(string $name, string $alias = null): QueryInterface
+    {
+        $columnName = $alias ?? $name;
+        $this->_columns[$columnName] = $name;
+
+        return $this;
+    } // end column
+
+
     /**
      * @param string $name
      * @param string|null $alias
@@ -82,7 +91,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end select
-    
+
     /**
      * @param string $name
      * @return QueryInterface
@@ -93,7 +102,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end table
-    
+
     /**
      * @param array $search
      * @return QueryInterface
@@ -104,7 +113,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end where
-    
+
     /**
      * @param array $search
      * @return QueryInterface
@@ -115,7 +124,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end having
-    
+
     /**
      * @param string $join
      * @return QueryInterface
@@ -126,7 +135,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end join
-    
+
     /**
      * @param array $joins
      * @return QueryInterface
@@ -137,7 +146,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end joins
-    
+
     /**
      * @param string $columnName
      * @return QueryInterface
@@ -148,7 +157,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end groupBy
-    
+
     /**
      * @param string $columnName
      * @return QueryInterface
@@ -159,7 +168,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end orderBy
-    
+
     /**
      * @param int $limit
      * @param int|null $offset
@@ -172,7 +181,7 @@ class Query implements QueryInterface
 
         return $this;
     } // end limit
-    
+
     /**
      * @return string
      * @throws DatabaseException
@@ -187,7 +196,7 @@ class Query implements QueryInterface
         if (!$this->table) {
             throw new DatabaseException("Undefined from fro query");
         }
-        
+
         return $driver->createSelectQuery(
             $this->columns,
             $this->table,
@@ -200,7 +209,7 @@ class Query implements QueryInterface
             $having
         );
     } // end getQuery
-    
+
     /**
      * @return array|null
      * @throws DatabaseException
@@ -209,7 +218,7 @@ class Query implements QueryInterface
     {
         return $this->connection->getRow($this->getQuery());
     } // end fetch
-    
+
     /**
      * @return array
      * @throws DatabaseException

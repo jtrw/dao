@@ -89,14 +89,14 @@ class MysqlObjectDriver extends AbstractObjectDriver
     } // end getTableIndexes
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param bool $isEnable
      */
-    public function setForeignKeyChecks(ObjectAdapterInterface $object, bool $isEnable = true)
+    public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true)
     {
         $sql = "SET FOREIGN_KEY_CHECKS=".(int)$isEnable;
     
-        $this->db->query($sql);
+        $object->query($sql);
     } // end setForeignKeyChecks
     
     /**

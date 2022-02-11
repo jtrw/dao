@@ -95,7 +95,7 @@ class MssqlObjectDriver extends AbstractObjectDriver
      * @param string $name
      * @return string
      */
-    public function quoteTableName($name)
+    public function quoteTableName($name): string
     {
         return '['.$name.']';
     } // end quoteTableName
@@ -214,7 +214,7 @@ class MssqlObjectDriver extends AbstractObjectDriver
             $sql = 'sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"';
         }
     
-        $this->db->query($sql);
+        $object->query($sql);
     } // end setForeignKeyChecks
     
     /**

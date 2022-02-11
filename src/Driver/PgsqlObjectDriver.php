@@ -70,7 +70,7 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     
         foreach ($tables as $table) {
             $sql = "ALTER TABLE ".$table." ".$status." TRIGGER USER";
-            $this->db->query($sql);
+            $object->query($sql);
         }
     } // end setForeignKeyChecks
     

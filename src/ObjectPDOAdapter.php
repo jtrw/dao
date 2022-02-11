@@ -2,7 +2,6 @@
 namespace Jtrw\DAO;
 
 use Jtrw\DAO\PDO\PDOHelperTrait;
-use Jtrw\DAO\PDO\PDOInterface;
 use PDO;
 use Jtrw\DAO\Driver\ObjectDriverInterface;
 use Jtrw\DAO\Exceptions\DatabaseException;

@@ -2,7 +2,6 @@
 namespace Jtrw\DAO\Driver;
 
 use Jtrw\DAO\DataAccessObjectInterface;
-use Jtrw\DAO\ObjectAdapterInterface;
 
 /**
  * Class MysqlObjectDriver
@@ -51,14 +50,14 @@ class MysqlObjectDriver extends AbstractObjectDriver
     } // end quoteColumnName
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $query
      * @param int $col
      * @param int $page
      * @return array
      * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
-    public function getSplitOnPages(ObjectAdapterInterface $object, string $query, int $col, int $page): array
+    public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array
     {
         $result = [];
         if ($page !== 0) {
@@ -80,12 +79,12 @@ class MysqlObjectDriver extends AbstractObjectDriver
     }// end getSplitOnPages
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $tableName
      * @return array
      * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
-    public function getTableIndexes(ObjectAdapterInterface $object, string $tableName): array
+    public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
         return $object->getAll("SHOW INDEX FROM ".$this->quoteTableName($tableName));
     } // end getTableIndexes
@@ -102,11 +101,11 @@ class MysqlObjectDriver extends AbstractObjectDriver
     } // end setForeignKeyChecks
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @return array
      * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
-    public function getTables(ObjectAdapterInterface $object): array
+    public function getTables(DataAccessObjectInterface $object): array
     {
         return $object->getCol("SHOW TABLES");
     } // end getTables

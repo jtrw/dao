@@ -3,7 +3,6 @@ namespace Jtrw\DAO\Driver;
 
 use Jtrw\DAO\DataAccessObjectInterface;
 use Jtrw\DAO\Exceptions\DatabaseException;
-use Jtrw\DAO\ObjectAdapterInterface;
 
 /**
  * Class AbstractObjectDriver
@@ -86,14 +85,14 @@ abstract class AbstractObjectDriver implements ObjectDriverInterface
     } // end createSelectQuery
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $query
      * @param int $col
      * @param int $page
      * @return array
      * @throws DatabaseException
      */
-    public function getSplitOnPages(ObjectAdapterInterface $object, string $query, int $col, int $page): array
+    public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array
     {
         throw new DatabaseException("Undefined method");
     } // end getSplitOnPages

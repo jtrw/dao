@@ -1,8 +1,8 @@
 <?php
 namespace Jtrw\DAO\Driver;
 
+use Jtrw\DAO\DataAccessObjectInterface;
 use Jtrw\DAO\Exceptions\DatabaseException;
-use Jtrw\DAO\ObjectAdapterInterface;
 
 /**
  * Class MssqlObjectDriver
@@ -123,14 +123,14 @@ class MssqlObjectDriver extends AbstractObjectDriver
 
     // XXX: Dirty hack for SQL Server
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $query
      * @param int $col
      * @param int $page
      * @return int[]
      * @throws DatabaseException
      */
-    public function getSplitOnPages(ObjectAdapterInterface $object, string $query, int $col, int $page): array
+    public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array
     {
         $orderBy = null;
         $result = [
@@ -176,12 +176,12 @@ class MssqlObjectDriver extends AbstractObjectDriver
     }// end getSplitOnPages
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $tableName
      * @return array
      * @throws DatabaseException
      */
-    public function getTableIndexes(ObjectAdapterInterface $object, string $tableName): array
+    public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
         $sql = "SELECT
                     a.name AS Index_Name,
@@ -203,10 +203,10 @@ class MssqlObjectDriver extends AbstractObjectDriver
     } // end getTableIndexes
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param bool $isEnable
      */
-    public function setForeignKeyChecks(ObjectAdapterInterface $object, bool $isEnable = true)
+    public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true)
     {
         $sql = 'sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"';
     
@@ -218,11 +218,11 @@ class MssqlObjectDriver extends AbstractObjectDriver
     } // end setForeignKeyChecks
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @return array
      * @throws DatabaseException
      */
-    public function getTables(ObjectAdapterInterface $object): array
+    public function getTables(DataAccessObjectInterface $object): array
     {
         return $object->getCol("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES");
     } // end getTables

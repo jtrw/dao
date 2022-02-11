@@ -1,7 +1,7 @@
 <?php
 namespace Jtrw\DAO\Driver;
 
-use Jtrw\DAO\ObjectAdapterInterface;
+use Jtrw\DAO\DataAccessObjectInterface;
 
 /**
  * Interface ObjectDriverInterface
@@ -46,31 +46,31 @@ interface ObjectDriverInterface
     ): string;
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $query
      * @param int $col
      * @param int $page
      * @return array
      */
-    public function getSplitOnPages(ObjectAdapterInterface $object, string $query, int $col, int $page): array;
+    public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array;
     
     /**
      * @param ObjectAdapterInterface $object
      * @param string $tableName
      * @return array
      */
-    public function getTableIndexes(ObjectAdapterInterface $object, string $tableName): array;
+    public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array;
     
     /**
      * @param ObjectAdapterInterface $object
      * @param bool $isEnable
      * @return mixed
      */
-    public function setForeignKeyChecks(ObjectAdapterInterface $object, bool $isEnable = true);
+    public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true);
     
     /**
      * @param ObjectAdapterInterface $object
      * @return array
      */
-    public function getTables(ObjectAdapterInterface $object): array;
+    public function getTables(DataAccessObjectInterface $object): array;
 }

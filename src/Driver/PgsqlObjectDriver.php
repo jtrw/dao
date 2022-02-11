@@ -2,7 +2,6 @@
 namespace Jtrw\DAO\Driver;
 
 use Jtrw\DAO\DataAccessObjectInterface;
-use Jtrw\DAO\ObjectAdapterInterface;
 
 /**
  * Class PgsqlObjectDriver
@@ -43,12 +42,12 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     } // end quoteColumnName
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param string $tableName
      * @return array
      * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
-    public function getTableIndexes(ObjectAdapterInterface $object, string $tableName): array
+    public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
         $sql = "SELECT indexname as table, indexdef FROM pg_indexes WHERE tablename = ".$object->quote($tableName);
 
@@ -56,11 +55,11 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     } // end getTableIndexes
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param bool $isEnable
      * @return mixed|void
      */
-    public function setForeignKeyChecks(ObjectAdapterInterface $object, bool $isEnable = true)
+    public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true)
     {
         $tables = $object->getTables();
     
@@ -76,11 +75,11 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     } // end setForeignKeyChecks
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @return array
      * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
-    public function c(ObjectAdapterInterface $object): array
+    public function getTables(DataAccessObjectInterface $object): array
     {
         return $object->getCol("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'");
     } // end getTables

@@ -1,23 +1,16 @@
 <?php
 namespace Jtrw\DAO\Exceptions;
 
+use Throwable;
+
 /**
  * Class DatabaseException
  * @package Jtrw\DAO\Exceptions
  */
 class DatabaseException extends \Exception
 {
-    /**
-     *
-     */
     const ERROR_CONSTRAINT           = 1451;
-    /**
-     *
-     */
     const ERROR_UNSUPPORTABLE_METHOD = -1000;
-    /**
-     *
-     */
     const ERROR_DUPLICATE = 1062;
 
     /**
@@ -32,7 +25,7 @@ class DatabaseException extends \Exception
      * @param string|null $query
      * @param Throwable|null $previous
      */
-    public function __construct($message = "", $code = 0, string $query = null, \Throwable $previous = null)
+    public function __construct($message = "", $code = 0, string $query = null, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

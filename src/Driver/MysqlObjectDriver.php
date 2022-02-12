@@ -1,6 +1,7 @@
 <?php
 namespace Jtrw\DAO\Driver;
 
+use PDO;
 use Jtrw\DAO\DataAccessObjectInterface;
 
 /**
@@ -11,9 +12,9 @@ class MysqlObjectDriver extends AbstractObjectDriver
 {
     /**
      * MysqlObjectDriver constructor.
-     * @param $db
+     * @param PDO $db
      */
-    public function __construct($db)
+    public function __construct(PDO $db)
     {
         $db->query("SET NAMES 'utf8'");
     } // end __construct
@@ -55,7 +56,6 @@ class MysqlObjectDriver extends AbstractObjectDriver
      * @param int $col
      * @param int $page
      * @return array
-     * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
     public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array
     {
@@ -82,7 +82,6 @@ class MysqlObjectDriver extends AbstractObjectDriver
      * @param DataAccessObjectInterface $object
      * @param string $tableName
      * @return array
-     * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
     public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
@@ -90,20 +89,19 @@ class MysqlObjectDriver extends AbstractObjectDriver
     } // end getTableIndexes
     
     /**
-     * @param ObjectAdapterInterface $object
+     * @param DataAccessObjectInterface $object
      * @param bool $isEnable
      */
-    public function setForeignKeyChecks(ObjectAdapterInterface $object, bool $isEnable = true)
+    public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true)
     {
         $sql = "SET FOREIGN_KEY_CHECKS=".(int)$isEnable;
     
-        $this->db->query($sql);
+        $object->query($sql);
     } // end setForeignKeyChecks
     
     /**
      * @param DataAccessObjectInterface $object
      * @return array
-     * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
     public function getTables(DataAccessObjectInterface $object): array
     {

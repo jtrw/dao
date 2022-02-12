@@ -1,9 +1,6 @@
 <?php
-
-
 namespace Jtrw\DAO\PDO;
 
-use Jtrw\DAO\DataAccessObject;
 use Jtrw\DAO\ObjectPDOAdapter;
 use PDO;
 use PDOException;
@@ -232,7 +229,7 @@ trait PDOHelperTrait
     {
         $type = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
         
-        if ($type == "sqlsrv" || $type == "dblib") {
+        if ($type === "sqlsrv" || $type === "dblib") {
             return ObjectPDOAdapter::TYPE_MSSQL;
         }
         

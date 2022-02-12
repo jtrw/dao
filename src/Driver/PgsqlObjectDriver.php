@@ -1,6 +1,7 @@
 <?php
 namespace Jtrw\DAO\Driver;
 
+use PDO;
 use Jtrw\DAO\DataAccessObjectInterface;
 
 /**
@@ -11,9 +12,9 @@ class PgsqlObjectDriver extends AbstractObjectDriver
 {
     /**
      * PgsqlObjectDriver constructor.
-     * @param $db
+     * @param PDO $db
      */
-    public function __construct($db)
+    public function __construct(PDO $db)
     {
         $db->query("SET NAMES 'utf8'");
     } // end __construct
@@ -45,7 +46,6 @@ class PgsqlObjectDriver extends AbstractObjectDriver
      * @param DataAccessObjectInterface $object
      * @param string $tableName
      * @return array
-     * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
     public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
@@ -70,14 +70,13 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     
         foreach ($tables as $table) {
             $sql = "ALTER TABLE ".$table." ".$status." TRIGGER USER";
-            $this->db->query($sql);
+            $object->query($sql);
         }
     } // end setForeignKeyChecks
     
     /**
      * @param DataAccessObjectInterface $object
      * @return array
-     * @throws \Jtrw\DAO\Exceptions\DatabaseException
      */
     public function getTables(DataAccessObjectInterface $object): array
     {

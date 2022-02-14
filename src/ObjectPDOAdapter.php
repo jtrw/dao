@@ -149,13 +149,13 @@ class ObjectPDOAdapter implements DataAccessObjectInterface
     /**
      * @param string $table
      * @param array $values
-     * @param bool $is_update_dublicate
+     * @param bool $isUpdateDublicate
      * @return int
      * @throws DatabaseException
      */
-    public function insert(string $table, array $values, bool $is_update_dublicate = false): int
+    public function insert(string $table, array $values, bool $isUpdateDublicate = false): int
     {
-        $sql = $this->getInsertSQL($table, $values, $is_update_dublicate);
+        $sql = $this->getInsertSQL($table, $values, $isUpdateDublicate);
 
         $this->query($sql);
 

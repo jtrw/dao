@@ -21,3 +21,12 @@ if (!$res) {
 
 $db = DataAccessObject::factory($db);
 ```
+
+## Search
+```sql
+$search = [
+       'columnName'     => 5,
+       'columnName2&IN' => [1, 2, 3, 4]
+       'columnName3&<'  => 7
+     ];
+```

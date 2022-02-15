@@ -43,27 +43,6 @@ class ObjectPDOAdapter implements DataAccessObjectInterface
     /**
      *
      */
-    public const FETCH_ALL   = 100;
-    /**
-     *
-     */
-    public const FETCH_ROW   = 101;
-    /**
-     *
-     */
-    public const FETCH_ASSOC = 102;
-    /**
-     *
-     */
-    public const FETCH_COL = 103;
-    /**
-     *
-     */
-    public const FETCH_ONE = 104;
-
-    /**
-     *
-     */
     private const SQL_WHERE = ' WHERE %s';
     /**
      *

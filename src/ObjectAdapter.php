@@ -16,9 +16,9 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     public const DEFAULT_PORT_PGSQL = '5432';
     public const DEFAULT_PORT_MSSQL = '1433';
     
-    private const SQL_WHERE = ' WHERE %s';
-    private const SQL_AND = ' AND ';
-    private const SQL_OR = ' OR ';
+    public const SQL_WHERE = ' WHERE %s';
+    public const SQL_AND = ' AND ';
+    public const SQL_OR = ' OR ';
     
     private const MSG_UNDEFINED_TYPE = "Undefined database type";
     
@@ -675,10 +675,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             throw new DatabaseException($msg, 3006);
         }
         
-        // XXX: Compatibility with PHP7+ hinting ?array
-        // FIXME: We've to fix all get* methods in to adapters
-        //$data = call_user_func([$this, $methods[$type]], $sql);
-        return $this->$methods[$type]($sql);
+        return $this->{$methods[$type]}($sql);
     } // end select
     
     /**

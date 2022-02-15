@@ -47,7 +47,6 @@ trait PDOHelperTrait
      */
     private function _execute(string $sql): PDOStatement
     {
-        $query = null;
         try {
             $query = $this->db->prepare($sql);
         } catch (PDOException $exp) {
@@ -133,7 +132,7 @@ trait PDOHelperTrait
     {
         $query = $this->_execute($sql);
         
-        return $query->fetchColumn() ?? null;
+        return $query->fetchColumn() ?: null;
     } // end getOne
     
     /**
@@ -149,7 +148,7 @@ trait PDOHelperTrait
         
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $val = array_shift($row);
-            if (count($row) == 1) {
+            if (count($row) === 1) {
                 $row = array_shift($row);
             }
             $result[$val] = $row;
@@ -161,7 +160,7 @@ trait PDOHelperTrait
     /**
      * @param bool $isolationLevel
      */
-    public function begin(bool $isolationLevel = false)
+    public function begin(bool $isolationLevel = false): void
     {
         $this->db->beginTransaction();
         
@@ -171,7 +170,7 @@ trait PDOHelperTrait
     /**
      *
      */
-    public function commit()
+    public function commit(): void
     {
         $this->db->commit();
         
@@ -181,7 +180,7 @@ trait PDOHelperTrait
     /**
      *
      */
-    public function rollback()
+    public function rollback(): void
     {
         $this->db->rollBack();
         
@@ -195,20 +194,12 @@ trait PDOHelperTrait
      */
     public function query(string $sql): int
     {
-        $affectedRows = 0;
-        
         try {
             $affectedRows = $this->db->exec($sql);
         } catch (PDOException $exp) {
             $code = (int) $exp->getCode();
             $code = $this->driver->getErrorCode($code);
             throw new DatabaseException($exp->getMessage(), $code, $sql, $exp);
-        }
-        
-        // TODO: Remove deprecated logic
-        if ($this->db->errorCode() > 0) {
-            $info = $this->db->errorInfo();
-            throw new DatabaseException($info[2], (int) $info[1], $sql);
         }
         
         return $affectedRows;

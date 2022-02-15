@@ -16,7 +16,7 @@ class PgsqlObjectDriver extends AbstractObjectDriver
      */
     public function __construct(PDO $db)
     {
-        $db->query("SET NAMES 'utf8'");
+        $db->exec("SET NAMES 'utf8'");
     } // end __construct
     
     /**

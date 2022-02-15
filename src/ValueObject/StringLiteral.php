@@ -2,7 +2,7 @@
 
 namespace Jtrw\DAO\ValueObject;
 
-class StringLiteral implements ValueObject
+class StringLiteral implements ValueObjectInterface
 {
     /**
      * @var string

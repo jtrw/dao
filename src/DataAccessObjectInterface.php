@@ -3,6 +3,7 @@
 namespace Jtrw\DAO;
 
 use Jtrw\DAO\Driver\ObjectDriverInterface;
+use Jtrw\DAO\ValueObject\ValueObjectInterface;
 
 /**
  * Interface ObjectAdapterInterface
@@ -118,14 +119,14 @@ interface DataAccessObjectInterface
      * @param array $condition
      * @param array $orderBy
      * @param int $type
-     * @return array
+     * @return ValueObjectInterface
      */
     public function select(
         string $selectSql,
         array $condition = [],
         array $orderBy = [],
-        int $type = DataAccessObject::FETCH_ALL
-    ): array;
+        int $type = self::FETCH_ALL
+    ): ValueObjectInterface;
 
     //Copy
     /**
@@ -139,31 +140,31 @@ interface DataAccessObjectInterface
      * @param string $sql
      * @return array
      */
-    public function getRow(string $sql): array;
+    public function getRow(string $sql): ValueObjectInterface;
 
     /**
      * @param string $sql
-     * @return array
+     * @return ValueObjectInterface
      */
-    public function getAll(string $sql): array;
+    public function getAll(string $sql): ValueObjectInterface;
 
     /**
      * @param string $sql
-     * @return array
+     * @return ValueObjectInterface
      */
-    public function getCol(string $sql): array;
+    public function getCol(string $sql): ValueObjectInterface;
 
     /**
      * @param string $sql
-     * @return string|null
+     * @return ValueObjectInterface|null
      */
-    public function getOne(string $sql): ?string;
+    public function getOne(string $sql): ?ValueObjectInterface;
 
     /**
      * @param string $sql
-     * @return array
+     * @return ValueObjectInterface
      */
-    public function getAssoc(string $sql): array;
+    public function getAssoc(string $sql): ValueObjectInterface;
 
     /**
      * @param bool $isolationLevel

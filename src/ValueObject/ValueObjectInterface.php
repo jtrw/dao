@@ -2,7 +2,7 @@
 
 namespace Jtrw\DAO\ValueObject;
 
-interface ValueObject
+interface ValueObjectInterface
 {
     /**
      * @return mixed

@@ -2,7 +2,7 @@
 
 namespace Jtrw\DAO\ValueObject;
 
-class ArrayLiteral implements ValueObject
+class ArrayLiteral implements ValueObjectInterface
 {
     /**
      * @var array

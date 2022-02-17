@@ -298,7 +298,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * );
      * </code>
      *
-     * @param array|bool $obj
+     * @param array|null $obj
      * @return array|mixed
      */
     public function getSqlCondition(array $obj = null): array
@@ -681,7 +681,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     /**
      * Returns an array of filter fields
      *
-     * @param $search
+     * @param array $search
      * @return array
      */
     public function getConditionFields(array $search): array
@@ -710,7 +710,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param array $buffer
      * @return bool
      */
-    private function _isNull($value, $buffer): bool
+    private function _isNull($value, array $buffer): bool
     {
         if (!empty($buffer[1]) &&
             strtolower($buffer[1]) === 'is' &&
@@ -759,20 +759,12 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     
     /**
      * Remove a table.
-     * @param $table
-     * @return mixed
+     * @param string $table
+     * @return int
      */
-    public function deleteTable(string $table)
+    public function deleteTable(string $table): int
     {
-        $type = $this->getDatabaseType();
-        
-        $sql = "DROP TABLE ".$this->quoteTableName($table);
-        
-        if ($type == static::TYPE_PGSQL) {
-            $sql = $sql.' CASCADE';
-        }
-        
-        return $this->query($sql);
+        return $this->getDriver()->deleteTable($this, $table);
     } // end deleteTable
     
     /**

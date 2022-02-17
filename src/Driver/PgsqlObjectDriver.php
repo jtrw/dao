@@ -80,6 +80,18 @@ class PgsqlObjectDriver extends AbstractObjectDriver
      */
     public function getTables(DataAccessObjectInterface $object): array
     {
-        return $object->getCol("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'");
+        return $object->getCol("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname = 'public'")->toNative();
     } // end getTables
+    
+    /**
+     * @param DataAccessObjectInterface $object
+     * @param string $table
+     * @return int
+     */
+    public function deleteTable(DataAccessObjectInterface $object, string $table): int
+    {
+        $sql = "DROP TABLE ".$this->quoteTableName($table)." CASCADE";
+        
+        return $object->query($sql);
+    } // end deleteTable
 }

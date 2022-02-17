@@ -85,7 +85,7 @@ class MysqlObjectDriver extends AbstractObjectDriver
      */
     public function getTableIndexes(DataAccessObjectInterface $object, string $tableName): array
     {
-        return $object->getAll("SHOW INDEX FROM ".$this->quoteTableName($tableName));
+        return $object->getAll("SHOW INDEX FROM ".$this->quoteTableName($tableName))->toNative();
     } // end getTableIndexes
     
     /**
@@ -105,6 +105,6 @@ class MysqlObjectDriver extends AbstractObjectDriver
      */
     public function getTables(DataAccessObjectInterface $object): array
     {
-        return $object->getCol("SHOW TABLES");
+        return $object->getCol("SHOW TABLES")->toNative();
     } // end getTables
 }

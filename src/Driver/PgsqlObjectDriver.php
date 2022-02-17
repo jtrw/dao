@@ -51,7 +51,7 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     {
         $sql = "SELECT indexname as table, indexdef FROM pg_indexes WHERE tablename = ".$object->quote($tableName);
 
-        return $object->getAll($sql);
+        return $object->getAll($sql)->toNative();
     } // end getTableIndexes
     
     /**

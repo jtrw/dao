@@ -10,7 +10,6 @@ use Jtrw\DAO\Exceptions\DatabaseException;
  */
 abstract class AbstractObjectDriver implements ObjectDriverInterface
 {
-    
     /**
      * @param array $columns
      * @param string $from
@@ -83,6 +82,18 @@ abstract class AbstractObjectDriver implements ObjectDriverInterface
 
         return $sql;
     } // end createSelectQuery
+    
+    /**
+     * @param DataAccessObjectInterface $object
+     * @param string $table
+     * @return int
+     */
+    public function deleteTable(DataAccessObjectInterface $object, string $table): int
+    {
+        $sql = "DROP TABLE ".$this->quoteTableName($table);
+
+        return $object->query($sql);
+    } // end deleteTable
     
     /**
      * @param DataAccessObjectInterface $object

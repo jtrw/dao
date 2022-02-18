@@ -104,7 +104,7 @@ class MssqlObjectDriver extends AbstractObjectDriver
      * @param string $key
      * @return string|string[]
      */
-    public function quoteColumnName($key)
+    public function quoteColumnName(string $key): string
     {
         // FIXME:
         $reserved = ['sum', 'avg', 'count'];
@@ -163,7 +163,7 @@ class MssqlObjectDriver extends AbstractObjectDriver
             "ORDER BY ".
                 "t.__row_num";
 
-        $result['rows'] = $object->getAll($sqlWrapper);
+        $result['rows'] = $object->getAll($sqlWrapper)->toNative();
 
         foreach ($result['rows'] as &$row) {
             $result['cnt'] = $row['__total'];
@@ -199,7 +199,7 @@ class MssqlObjectDriver extends AbstractObjectDriver
                             a.is_hypothetical = 0 AND
                      a.object_id = OBJECT_ID('".$tableName."')";
 
-        return $object->getAll($sql);
+        return $object->getAll($sql)->toNative();
     } // end getTableIndexes
     
     /**
@@ -224,6 +224,6 @@ class MssqlObjectDriver extends AbstractObjectDriver
      */
     public function getTables(DataAccessObjectInterface $object): array
     {
-        return $object->getCol("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES");
+        return $object->getCol("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES")->toNative();
     } // end getTables
 }

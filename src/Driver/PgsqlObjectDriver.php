@@ -29,17 +29,17 @@ class PgsqlObjectDriver extends AbstractObjectDriver
     } // end quoteTableName
     
     /**
-     * @param string $key
+     * @param string $name
      * @return string
      */
-    public function quoteColumnName(string $key): string
+    public function quoteColumnName(string $name): string
     {
-        $key = "\"".$key."\"";
-        if (strpos($key, '.') !== false) {
-            $key = str_replace(".", "\".\"", $key);
+        $name = "\"".$name."\"";
+        if (strpos($name, '.') !== false) {
+            $name = str_replace(".", "\".\"", $name);
         }
         
-        return $key;
+        return $name;
     } // end quoteColumnName
     
     /**

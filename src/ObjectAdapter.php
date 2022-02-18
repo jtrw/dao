@@ -106,10 +106,8 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     /**
      * @param string $table
      * @param array $condition
-     * @return int
-     * @throws DatabaseException
      */
-    public function delete(string $table, array $condition)
+    public function delete(string $table, array $condition): int
     {
         $where = $this->getSqlCondition($condition);
         
@@ -136,36 +134,33 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             foreach ($values as $value) {
                 $res[] = $this->insert($table, $value);
             }
-            
-        } else {
-            $rows = [];
-            foreach ($values as $items) {
-                $data = $this->getInsertValues($items);
-                $rows[] = '('.implode(', ', $data).')';
-            }
-            
-            $columns = array_keys($values[0]);
-            foreach ($columns as &$column) {
-                $column = $this->quoteColumnName($column);
-            }
-            unset($column);
-            
-            $table = $this->quoteTableName($table);
-            
-            $sql = "INSERT INTO ".$table." (".implode(", ", $columns).") VALUES ".
-                implode(', ', $rows);
-            
-            $res = $this->query($sql);
+            return $res;
+        }
+        $rows = [];
+        foreach ($values as $items) {
+            $data = $this->getInsertValues($items);
+            $rows[] = '('.implode(', ', $data).')';
         }
         
-        return $res;
+        $columns = array_keys($values[0]);
+        foreach ($columns as &$column) {
+            $column = $this->quoteColumnName($column);
+        }
+        unset($column);
+        
+        $table = $this->quoteTableName($table);
+        
+        $sql = "INSERT INTO ".$table." (".implode(", ", $columns).") VALUES ".
+            implode(', ', $rows);
+        
+        return $this->query($sql);
     } // end massInsert
     
     /**
      * @param array $values
      * @return array
      */
-    private function getInsertValues(array $values)
+    private function getInsertValues(array $values): array
     {
         foreach ($values as &$item) {
             if (is_null($item)) {
@@ -187,9 +182,8 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param array $values
      * @param array $condition
      * @return int
-     * @throws DatabaseException
      */
-    public function update(string $table, array $values, array $condition = [])
+    public function update(string $table, array $values, array $condition = []): int
     {
         $sql = $this->getUpdateSQL($table, $values, $condition);
         
@@ -199,11 +193,11 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     /**
      * @param string $table
      * @param array $values
-     * @param bool $isUpdateDublicate
+     * @param bool $isUpdateDuplicate
      * @return string
      * @throws DatabaseException
      */
-    public function getInsertSQL(string $table, array $values, bool $isUpdateDublicate = false)
+    public function getInsertSQL(string $table, array $values, bool $isUpdateDuplicate = false): string
     {
         $values = $this->getInsertValues($values);
         $columns = array_keys($values);
@@ -218,7 +212,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             "(".implode(", ", $columns).") ".
             "VALUES (".implode(", ", $values).")";
         
-        if ($isUpdateDublicate) {
+        if ($isUpdateDuplicate) {
             $sql = $this->_getUpdateDuplicateSQL($sql, $values);
         }
         
@@ -233,7 +227,6 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     public function getUpdateValues(array $values, string $tableName = null): array
     {
         foreach ($values as $key => &$item) {
-            
             if ($tableName) {
                 $key = $tableName.$this->_dbTableNameDelimiterInColumnName.$key;
             }
@@ -252,7 +245,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             
             $key = $this->quoteColumnName($key);
             
-            if (!$this->reservedWords || !in_array($item, $this->reservedWords)) {
+            if (!$this->reservedWords || !in_array($item, $this->reservedWords, true)) {
                 $item = $key." = ".$this->quote($item);
             } else {
                 $item = $key." = ".$item;
@@ -329,6 +322,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param string $key
      * @param $item
      * @return string
+     * @throws DatabaseException
      */
     private function _getConditionResult(string $key, $item): string
     {

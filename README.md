@@ -28,6 +28,6 @@ $search = [
        'columnName'     => 5,
        'columnName2&IN' => [1, 2, 3, 4]
        'columnName3&<'  => 7,
-       'columnName4&>=' 3
+       'columnName4&>=' => 3
      ];
 ```

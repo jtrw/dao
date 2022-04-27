@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  dao_php:
+    container_name: ${APP_COMPOSE_PROJECT_NAME}_php_fpm
+    build:
+      context: ./.docker/php${PHP_VER}-dev-fpm
+      args:
+        PHP_VER: ${PHP_VER}
+    networks:
+      - dao-network
+    env_file:
+      - .env
+    user: 1000:1000
+    ports:
+      - "9005:9000"
+    environment:
+      PHP_IDE_CONFIG: serverName=docker
+    volumes:
+      - ~/.composer/cache/:/.composer_cache/:rw
+      - ./.docker/php7.4-fpm-dev/conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./:/app:rw
+    working_dir: /app
+
+  dao_mariadb:
+    container_name: ${APP_COMPOSE_PROJECT_NAME}_mysql
+    image: mariadb:latest
+    networks:
+      - monolith-backend
+    volumes:
+      - ./.docker/mysql/conf.d/:/etc/mysql/conf.d/source/
+      - dao_mariadb_data:/var/lib/mysql
+    restart: always
+    ports:
+      - 3309:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    env_file:
+      - .env
+
+  dao_postgres:
+    container_name: postgres_db
+    image: postgres:13-alpine
+    networks:
+      - dao-network
+    environment:
+      POSTGRES_USER: "postgres_user"
+      POSTGRES_PASSWORD: "postgres_pass"
+    volumes:
+      - dao_postgres_db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+networks:
+  dao-network:
+    name: dao-network
+    driver: bridge

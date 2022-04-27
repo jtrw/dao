@@ -135,10 +135,10 @@ interface DataAccessObjectInterface
      * @return string
      */
     public function quote(string $obj, int $type = null): string;
-
+    
     /**
      * @param string $sql
-     * @return array
+     * @return ValueObjectInterface
      */
     public function getRow(string $sql): ValueObjectInterface;
 
@@ -158,7 +158,7 @@ interface DataAccessObjectInterface
      * @param string $sql
      * @return ValueObjectInterface|null
      */
-    public function getOne(string $sql): ?ValueObjectInterface;
+    public function getOne(string $sql): ValueObjectInterface;
 
     /**
      * @param string $sql

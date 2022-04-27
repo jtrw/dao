@@ -135,14 +135,16 @@ class ObjectPDOAdapter extends ObjectAdapter
     
     /**
      * @param string $sql
-     * @return ValueObjectInterface|null
+     *
+     * @return ValueObjectInterface
      * @throws DatabaseException
      */
-    public function getOne(string $sql): ?ValueObjectInterface
+    public function getOne(string $sql): ValueObjectInterface
     {
         $query = $this->_execute($sql);
+        $result = $query->fetchColumn() ?? '';
         
-        return new StringLiteral($query->fetchColumn()) ?: null;
+        return new StringLiteral($result);
     } // end getOne
     
     /**

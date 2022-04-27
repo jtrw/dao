@@ -216,7 +216,7 @@ class Query implements QueryInterface
      */
     public function fetch(): ?array
     {
-        return $this->connection->getRow($this->getQuery());
+        return $this->connection->getRow($this->getQuery())->toNative();
     } // end fetch
 
     /**
@@ -225,7 +225,7 @@ class Query implements QueryInterface
      */
     public function fetchAll(): array
     {
-        return $this->connection->getAll($this->getQuery());
+        return $this->connection->getAll($this->getQuery())->toNative();
     } // end fetchAll
 
 }

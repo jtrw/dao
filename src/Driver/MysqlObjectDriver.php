@@ -71,8 +71,8 @@ class MysqlObjectDriver extends AbstractObjectDriver
 
         $query .= " LIMIT ".($page * $col).", ".$col;
 
-        $result['rows']    = $object->getAll($query);
-        $result['cnt']     = $object->getOne('SELECT FOUND_ROWS()');
+        $result['rows']    = $object->getAll($query)->toNative();
+        $result['cnt']     = $object->getOne('SELECT FOUND_ROWS()')->toNative();
         $result['pageCnt'] = $result['cnt'] > 0 ? ceil($result['cnt'] / $col) : 0;
 
         return $result;
@@ -94,7 +94,7 @@ class MysqlObjectDriver extends AbstractObjectDriver
      */
     public function setForeignKeyChecks(DataAccessObjectInterface $object, bool $isEnable = true)
     {
-        $sql = "SET FOREIGN_KEY_CHECKS=".(int)$isEnable;
+        $sql = "SET FOREIGN_KEY_CHECKS=".(int) $isEnable;
     
         $object->query($sql);
     } // end setForeignKeyChecks

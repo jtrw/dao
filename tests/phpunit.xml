@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<phpunit
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap="bootstrap.php"
+        cacheResult="false"
+        colors="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        stopOnRisky="false"
+        timeoutForSmallTests="1"
+        timeoutForMediumTests="10"
+        timeoutForLargeTests="60"
+        verbose="false">
+
+    <logging>
+        <testdoxText outputFile="report/testdox.txt"/>
+    </logging>
+
+    <php>
+        <server name="SERVER_ADDR" value="127.0.0.1"/>
+
+        <const name="DB_DSN" value="mysql:dbname=dao;port=3306;host=dao_mariadb"/>
+        <const name="DB_NAME" value="dao"/>
+        <const name="DB_USER" value="dao_user"/>
+        <const name="DB_PASSWD" value="rootpw"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Mysql">
+            <directory>Mysql</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -17,9 +17,9 @@ jobs:
     
     - name: Build the Docker image
       run: docker-compose up -d
-    
-    - name: Check running containers
-      run: docker ps
+      
+    - name: Composer Install
+      run: docker-compose run --rm --no-deps dao_php sh -lc 'composer install -vvv'
     
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'

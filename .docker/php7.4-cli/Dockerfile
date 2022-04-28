@@ -37,27 +37,31 @@ RUN docker-php-ext-install opcache
 RUN docker-php-ext-enable opcache
 
 # amqp
-RUN apk add --no-cache rabbitmq-c-dev
-RUN pecl install amqp
-RUN docker-php-ext-enable amqp
+#RUN apk add --no-cache rabbitmq-c-dev
+#RUN pecl install amqp
+#RUN docker-php-ext-enable amqp
 
 # redis
-RUN pecl install redis
-RUN docker-php-ext-enable redis
+#RUN pecl install redis
+#RUN docker-php-ext-enable redis
 
 # zip
-RUN apk add --no-cache libzip-dev
-RUN docker-php-ext-install zip
-RUN docker-php-ext-enable zip
+#RUN apk add --no-cache libzip-dev
+#RUN docker-php-ext-install zip
+#RUN docker-php-ext-enable zip
+
+# mysql
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-enable mysqli
+
+# pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-enable pdo_mysql
 
 # pdo_pgsql
-RUN apk add --no-cache postgresql-dev
-RUN docker-php-ext-install pdo_pgsql
-RUN docker-php-ext-enable pdo_pgsql
-
-# opcache
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-enable opcache
+#RUN apk add --no-cache postgresql-dev
+#RUN docker-php-ext-install pdo_pgsql
+#RUN docker-php-ext-enable pdo_pgsql
 
 # pcntl
 RUN docker-php-ext-install pcntl

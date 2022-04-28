@@ -31,14 +31,14 @@ stop-services: shared-service-stop ## stop shared services
 start-all: start start-services ## start full project environment
 
 .PHONY: stop-all
-stop-all: stop stop-services ## stop full project environment
+stop-all: stop ## stop full project environment
 
 .PHONY: remove
 remove: ## remove project docker containers
 	docker-compose rm -v -f
 
 .PHONY: erase
-erase: stop-all remove shared-service-erase docker-remove-volumes ## stop and delete containers, clean volumes
+erase: stop-all remove docker-remove-volumes ## stop and delete containers, clean volumes
 
 .PHONY: build
 build: ## build environment and initialize composer and project dependencies

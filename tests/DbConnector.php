@@ -25,7 +25,7 @@ class DbConnector
     private static function initMysql(): DataAccessObjectInterface
     {
         $dbName = getenv('MYSQL_DATABASE');
-        $dsn = "mysql:dbname={$dbName};port=3306;host=dao_mariadb";
+        $dsn = "mysql:dbname={$dbName};port=3306;host=localhost";
         echo $dsn."\n";
         $db = new \PDO(
             $dsn,

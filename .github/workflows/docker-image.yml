@@ -27,6 +27,9 @@ jobs:
     - name: Docker ps
       run: docker ps
     
+    - name: Wait for MySQL
+      run: sleep 15   
+    
     - name: Phpunit
       run: php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr
     

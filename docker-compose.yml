@@ -19,6 +19,7 @@ services:
     volumes:
       - ~/.composer/cache/:/.composer_cache/:rw
       - ./.docker/php7.4-fpm-dev/conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./tests/reports:/tests/reports/:rw
       - ./:/app:rw
     working_dir: /app
 

@@ -22,7 +22,7 @@ jobs:
       run: make fix-permission
    
     - name: Composer Install
-      run: docker-compose run --rm --no-deps dao_php sh -lc 'composer install -vvv'
+      run: composer install -vvv
     
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'

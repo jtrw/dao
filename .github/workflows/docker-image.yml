@@ -32,6 +32,3 @@ jobs:
     
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'
-    
-    - name: Make logs
-      run: make logs

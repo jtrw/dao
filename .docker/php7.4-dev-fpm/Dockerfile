@@ -13,26 +13,26 @@ RUN apk add --no-cache curl
 # php extensions
 
 # mcrypt
-RUN apk add --no-cache libmcrypt-dev
-RUN pecl install mcrypt-1.0.3
-RUN docker-php-ext-enable mcrypt
+#RUN apk add --no-cache libmcrypt-dev
+#RUN pecl install mcrypt-1.0.3
+#RUN docker-php-ext-enable mcrypt
 
 # bcmath
-RUN docker-php-ext-install bcmath
-RUN docker-php-ext-enable bcmath
+#RUN docker-php-ext-install bcmath
+#RUN docker-php-ext-enable bcmath
 
 # sockets
-RUN docker-php-ext-install sockets
-RUN docker-php-ext-enable sockets
+#RUN docker-php-ext-install sockets
+#RUN docker-php-ext-enable sockets
 
 # intl
-RUN apk add --no-cache icu-dev
-RUN docker-php-ext-install intl
-RUN docker-php-ext-enable intl
+#RUN apk add --no-cache icu-dev
+#RUN docker-php-ext-install intl
+#RUN docker-php-ext-enable intl
 
 # opcache
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-enable opcache
+#RUN docker-php-ext-install opcache
+#RUN docker-php-ext-enable opcache
 
 # amqp
 #RUN apk add --no-cache rabbitmq-c-dev
@@ -52,10 +52,6 @@ RUN docker-php-ext-enable opcache
 #RUN apk add --no-cache postgresql-dev
 #RUN docker-php-ext-install pdo_pgsql
 #RUN docker-php-ext-enable pdo_pgsql
-
-# opcache
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-enable opcache
 
 # pdo_pgsql
 #RUN apk add --no-cache postgresql-dev

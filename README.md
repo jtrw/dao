@@ -31,3 +31,7 @@ $search = [
        'columnName4&>=' => 3
      ];
 ```
+
+## Unittest
+
+`php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors`

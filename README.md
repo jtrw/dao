@@ -30,3 +30,7 @@ $search = [
        'columnName3&<'  => 7
      ];
 ```
+
+## Unittest
+
+`php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors`

@@ -4,7 +4,7 @@
         backupStaticAttributes="false"
         bootstrap="bootstrap.php"
         cacheResult="false"
-        colors="false"
+        colors="true"
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
@@ -21,10 +21,22 @@
         verbose="false">
 
     <logging>
-        <testdoxText outputFile="report/testdox.txt"/>
+        <junit outputFile="./reports/phpunit.xml" />
     </logging>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./../src</directory>
+        </include>
+        <report>
+            <clover outputFile="./reports/clover.xml"/>
+        </report>
+    </coverage>
 
     <php>
+        <ini name="error_reporting" value="-1" />
+        <ini name="xdebug.mode" value="coverage" />
+        <env name="XDEBUG_MODE" value="coverage" />
+
         <server name="SERVER_ADDR" value="127.0.0.1"/>
 
         <const name="DB_DSN" value="mysql:dbname=dao;port=3306;host=dao_mariadb"/>

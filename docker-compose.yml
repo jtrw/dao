@@ -32,7 +32,7 @@ services:
       - dao_mariadb_db:/var/lib/mysql
     restart: always
     ports:
-      - 3306:3306
+      - 3305:3306
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s

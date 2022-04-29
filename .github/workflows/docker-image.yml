@@ -17,7 +17,10 @@ jobs:
     
     - name: Build the Docker image
       run: docker-compose up -d
-      
+   
+    - name: Fix Permission
+      run: make fix-permission
+   
     - name: Composer Install
       run: docker-compose run --rm --no-deps dao_php sh -lc 'composer install -vvv'
     

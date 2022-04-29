@@ -92,3 +92,5 @@ RUN chmod +r /usr/local/etc/php/conf.d/conf.ini
 RUN rm -rf /var/cache/apk/* /var/tmp/* /tmp/*
 
 WORKDIR /app
+
+RUN chown -R www-data:www-data /app

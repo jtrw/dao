@@ -33,6 +33,9 @@ jobs:
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover $GITHUB_WORKSPACE/clover.cov'
    
+    - name: Echo dir
+      run: echo $GITHUB_WORKSPACE | cd $GITHUB_WORKSPACE | ls -la;
+   
     - name: install golangci-lint and goveralls
       run: |
          sh -s -- -b $GITHUB_WORKSPACE v1.44.0

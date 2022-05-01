@@ -18,8 +18,8 @@ jobs:
     - name: Build the Docker image
       run: docker-compose up -d
    
-    - name: Fix Permission
-      run: make fix-permission
+    # - name: Fix Permission
+    #  run: make fix-permission
    
     - name: Composer Install
       run: composer install -vvv

@@ -46,7 +46,7 @@ jobs:
          go get -u github.com/mattn/goveralls
 
     - name: submit coverage
-      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=tests/reports/clover.xml
+      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=/app/tests/reports/clover.xml
       working-directory: src
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}  

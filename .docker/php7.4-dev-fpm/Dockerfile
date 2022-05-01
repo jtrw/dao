@@ -93,4 +93,4 @@ RUN rm -rf /var/cache/apk/* /var/tmp/* /tmp/*
 
 WORKDIR /app
 
-RUN chown -R www-data /tests/reports
+RUN chown -R www-data /app/tests/reports

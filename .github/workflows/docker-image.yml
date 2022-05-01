@@ -34,7 +34,11 @@ jobs:
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover $GITHUB_WORKSPACE/clover_t.cov'
    
     - name: Echo dir
-      run: printenv | cd $GITHUB_WORKSPACE | ls -la;
+      run: printenv
+   
+   
+    - name: Echo dir
+      run: echo $GITHUB_WORKSPACE;
    
     - name: install golangci-lint and goveralls
       run: |

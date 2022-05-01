@@ -14,15 +14,7 @@ RUN pecl install pcov && docker-php-ext-enable pcov
 
 RUN rm -rf /var/cache/apk/* /var/tmp/* /tmp/*
 
-COPY . /app
-
 WORKDIR /app
-
-RUN pwd
-
-RUN ls -la
-
-RUN chown -R www-data /app/tests/reports
 
 
 

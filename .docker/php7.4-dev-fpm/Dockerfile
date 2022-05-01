@@ -95,4 +95,6 @@ WORKDIR /app
 
 RUN pwd
 
+RUN ls -la
+
 RUN chown -R www-data /app/tests/reports

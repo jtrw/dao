@@ -93,6 +93,6 @@ RUN rm -rf /var/cache/apk/* /var/tmp/* /tmp/*
 
 WORKDIR /app
 
-COPY . /app
+RUN pwd
 
 RUN chown -R www-data /app/tests/reports

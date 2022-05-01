@@ -1,7 +1,13 @@
 <?php
 require __DIR__."/../vendor/autoload.php";
 
-echo get_current_user()."\n";
+echo "Current User: ".get_current_user()."\n";
+
+$output=null;
+$retval=null;
+exec('whoami', $output, $retval);
+echo "Returned with status $retval and output:\n";
+print_r($output);
 
 try {
     $result = file_put_contents(__DIR__."/reports/test.xml", "Hello");

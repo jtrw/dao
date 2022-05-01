@@ -31,7 +31,7 @@ jobs:
       run: sleep 15   
     
     - name: Phpunit
-      run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover $GITHUB_WORKSPACE/clover_t.cov'
+      run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'
    
     - name: Echo dir
       run: printenv
@@ -46,7 +46,7 @@ jobs:
          go get -u github.com/mattn/goveralls
 
     - name: submit coverage
-      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/clover_t.cov
+      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=tests/reports/clover.xml
       working-directory: src
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}  

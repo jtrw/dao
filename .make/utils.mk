@@ -14,8 +14,6 @@ fix-permission: ## fix permission for docker env
 	echo chown -R $(shell whoami):$(shell whoami) *
 	echo chown -R $(shell whoami):$(shell whoami) .docker/*
 	echo chmod +x ./bin/console
-	echo chown -R www-data:www-data tests/reports/*
-	echo chmod -R 0777 tests/reports
 
 wait:
 ifeq ($(OS),Windows_NT)

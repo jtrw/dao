@@ -31,10 +31,10 @@ jobs:
       run: sleep 15   
     
     - name: Phpunit
-      run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover $GITHUB_WORKSPACE/clover.cov'
+      run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover $GITHUB_WORKSPACE/clover_t.cov'
    
     - name: Echo dir
-      run: echo $GITHUB_WORKSPACE | cd $GITHUB_WORKSPACE | ls -la;
+      run: printenv | cd $GITHUB_WORKSPACE | ls -la;
    
     - name: install golangci-lint and goveralls
       run: |
@@ -42,7 +42,7 @@ jobs:
          go get -u github.com/mattn/goveralls
 
     - name: submit coverage
-      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/clover.cov
+      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/clover_t.cov
       working-directory: src
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}  

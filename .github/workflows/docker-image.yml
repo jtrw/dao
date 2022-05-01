@@ -33,20 +33,13 @@ jobs:
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'
    
-    - name: Echo dir
-      run: printenv
-   
-   
-    - name: Echo dir
-      run: echo $GITHUB_WORKSPACE;
-   
     - name: install golangci-lint and goveralls
       run: |
          sh -s -- -b $GITHUB_WORKSPACE v1.44.0
          go get -u github.com/mattn/goveralls
 
     - name: submit coverage
-      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/tests/reports/clover.xml
+      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/tests/reports/clover.txt
       working-directory: src
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}  

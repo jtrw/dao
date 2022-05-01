@@ -82,7 +82,7 @@ RUN docker-php-ext-enable pcntl
 # php settings
 ADD conf.ini /usr/local/etc/php/conf.d/
 RUN chmod +r /usr/local/etc/php/conf.d/conf.ini
-#COPY www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY www.conf /usr/local/etc/php-fpm.d/www.conf
 
 RUN rm -rf /var/cache/apk/* /var/tmp/* /tmp/*
 

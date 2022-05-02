@@ -32,14 +32,9 @@ jobs:
     
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr'
-   
-    - name: install golangci-lint and goveralls
-      run: |
-         sh -s -- -b $GITHUB_WORKSPACE v1.44.0
-         go get -u github.com/mattn/goveralls
 
-    - name: submit coverage
-      run: $(go env GOPATH)/bin/goveralls -service="github" -coverprofile=$GITHUB_WORKSPACE/tests/reports/clover.txt
-      working-directory: src
-      env:
-        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+    - name: Send code coverage report to Codecov.io
+      uses: codecov/codecov-action@v2
+      with:
+        files: $GITHUB_WORKSPACE/tests/reports/clover.xml
+        token: ${{ secrets.CODECOV_TOKEN }}

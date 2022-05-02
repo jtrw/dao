@@ -1,6 +1,7 @@
 # Data Access Object
 
 [![codecov](https://codecov.io/gh/jtrw/dao/branch/master/graph/badge.svg?token=FYMTSQDQP5)](https://codecov.io/gh/jtrw/dao)
+
 PDO Usage
 ===================
 

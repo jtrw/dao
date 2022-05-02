@@ -25,7 +25,10 @@ jobs:
       run: composer install -vvv
     
     - name: Wait for MySQL
-      run: sleep 5   
+      run: sleep 5
+
+    - name: Make Migration
+      run: make migration
     
     - name: Phpunit
       run: docker-compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover=coverage.xml'

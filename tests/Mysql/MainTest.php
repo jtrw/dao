@@ -16,4 +16,20 @@ class MainTest extends TestCase
 
         Assert::assertEquals($date,date("Y-m-d"));
     }
+    
+    public function testInsert()
+    {
+        $db = DbConnector::getInstance();
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'test',
+            'value'     => 'dataTest'
+        ];
+        $idSetting = $db->insert("settings", $values);
+        Assert::assertIsInt($idSetting);
+        
+       $result = $db->select("SELECT * FROM settings", ['id' => $idSetting], [], DataAccessObjectInterface::FETCH_ROW)->toNative();
+       
+       Assert::assertEquals($result['value'], $values['value']);
+    }
 }

@@ -30,6 +30,7 @@ services:
       - dao-network
     volumes:
       - ./.docker/mysql/conf.d/:/etc/mysql/conf.d/source/
+      - ./.docker/mysql/initdb:/tmp/initdb/
       - dao_mariadb_db:/var/lib/mysql
     restart: always
     ports:

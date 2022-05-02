@@ -50,3 +50,7 @@ setup: setup-enqueue ## setup-db build environment and initialize composer and p
 .PHONY: clean
 clean: ## Clear build vendor report folders
 	rm -rf build/ vendor/ var/
+
+.PHONY: migrate
+migrate:
+	docker-compose exec dao_mariadb bash /tmp/initdb/simple-db.sh

@@ -28,8 +28,8 @@
             <directory suffix=".php">./../src</directory>
         </include>
         <report>
-            <text outputFile="reports/clover.txt" />
-<!--            <clover outputFile="reports/clover.xml"/>-->
+<!--            <text outputFile="reports/clover.txt" />-->
+            <clover outputFile="reports/clover.xml"/>
         </report>
     </coverage>
 

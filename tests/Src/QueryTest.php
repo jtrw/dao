@@ -24,22 +24,66 @@ class QueryTest extends TestCase
     {
         $query = new Query($this->db);
         
-        $id = $this->createItem();
-        $result = $query->select("caption")
-            ->table(static::TABLE_SETTINGS)
-            ->where(['id' => $id])
-            ->fetch();
-        
-        Assert::assertEquals($result['caption'], "testQuery");
-    }
-    
-    private function createItem(): int
-    {
         $values = [
             'id_parent' => 0,
             'caption'   => 'testQuery',
             'value'     => 'dataTestQuery'
         ];
+        
+        $id = $this->createItem($values);
+        $result = $query->select("caption")
+            ->table(static::TABLE_SETTINGS)
+            ->where(['id' => $id])
+            ->fetch();
+        
+        Assert::assertEquals($result['caption'], $values['caption']);
+    }
+    
+    public function testFetchAll()
+    {
+        $query = new Query($this->db);
+        
+        $values = $this->createItems();
+        
+        $result = $query->select("caption")
+            ->select("id")
+            ->select("COUNT(id)", "count")
+            ->table(static::TABLE_SETTINGS)
+            ->where(['id&>' => 0])
+            ->groupBy("id")
+            ->orderBy("id DESC")
+            ->having(["COUNT(id)&>" => 0])
+            ->fetchAll();
+        
+        
+        
+        Assert::assertEquals($result[0]['id'], $values[1]['id']);
+        Assert::assertEquals($result[1]['id'], $values[0]['id']);
+    }
+    
+    private function createItems(): array
+    {
+        $values = [
+            [
+                'id_parent' => 0,
+                'caption'   => 'on1',
+                'value'     => 'dataOne1'
+            ],
+            [
+                'id_parent' => 0,
+                'caption'   => 'on2',
+                'value'     => 'dataOne2'
+            ]
+        ];
+        foreach ($values as $key => $value) {
+            $values[$key]['id'] = $this->createItem($value);
+        }
+        
+        return $values;
+    }
+    
+    private function createItem(array $values): int
+    {
         $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
         Assert::assertIsInt($idSetting);
         return $idSetting;

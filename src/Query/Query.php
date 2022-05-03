@@ -70,15 +70,6 @@ class Query implements QueryInterface
         $this->connection = $connection;
     } // end __construct
 
-    public function column(string $name, string $alias = null): QueryInterface
-    {
-        $columnName = $alias ?? $name;
-        $this->_columns[$columnName] = $name;
-
-        return $this;
-    } // end column
-
-
     /**
      * @param string $name
      * @param string|null $alias

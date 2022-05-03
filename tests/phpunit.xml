@@ -48,7 +48,7 @@
 
     <testsuites>
         <testsuite name="Mysql">
-            <directory>Mysql</directory>
+            <directory>Src</directory>
         </testsuite>
     </testsuites>
 </phpunit>

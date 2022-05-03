@@ -42,7 +42,7 @@ abstract class AbstractObjectDriver implements ObjectDriverInterface
                 $columnAlias = null;
             }
 
-            $columnName = $this->quoteColumnName($columnName);
+            //$columnName = $this->quoteColumnName($columnName);
 
             $queryColumns[] = $columnAlias ? $columnName.' AS '.$columnAlias : $columnName;
         }

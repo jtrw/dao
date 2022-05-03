@@ -49,6 +49,65 @@ class MainTest extends TestCase
         Assert::assertNotEmpty($resultData);
         Assert::assertEquals($values['value'], $resultData['value']);
     }
+    
+    public function testMassInsert()
+    {
+        $values = [
+            [
+                'id_parent' => 0,
+                'caption'   => 'massTest1',
+                'value'     => 'dataMassTest1'
+            ],
+            [
+                'id_parent' => 0,
+                'caption'   => 'massTest2',
+                'value'     => 'dataMassTest2'
+            ]
+            
+        ];
+        $this->db->massInsert(static::TABLE_SETTINGS, $values);
+        
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            'caption' => $values[1]['caption']
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $result);
+        
+        $resultData = $result->toNative();
+        Assert::assertNotEmpty($resultData);
+        Assert::assertEquals($values[1]['value'], $resultData['value']);
+    }
+    
+    public function testMassInsertInForeach()
+    {
+        $values = [
+            [
+                'id_parent' => 0,
+                'caption'   => 'massTest3',
+                'value'     => 'dataMassTest3'
+            ],
+            [
+                'id_parent' => 0,
+                'caption'   => 'massTest4',
+                'value'     => 'dataMassTest4'
+            ]
+        
+        ];
+        $this->db->massInsert(static::TABLE_SETTINGS, $values, true);
+        
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            'caption' => $values[1]['caption']
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $result);
+        
+        $resultData = $result->toNative();
+        Assert::assertNotEmpty($resultData);
+        Assert::assertEquals($values[1]['value'], $resultData['value']);
+    }
+    
     public function testUpdate()
     {
         $sql = "SELECT * FROM ".static::TABLE_SETTINGS;

@@ -8,7 +8,7 @@ use Jtrw\DAO\ValueObject\ValueObjectInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class MainTest extends TestCase
+class ObjectAdapterTest extends TestCase
 {
     private const TABLE_SETTINGS = "settings";
     

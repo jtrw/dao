@@ -139,4 +139,29 @@ class ObjectAdapterTest extends TestCase
         Assert::assertNotEmpty($resultData);
         Assert::assertEquals($resultData['value'], $values['value']);
     }
+    
+    public function testDelete()
+    {
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'forDelete',
+            'value'     => 'dataTest'
+        ];
+        $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
+        Assert::assertIsInt($idSetting);
+        
+        $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $idSetting]);
+
+        Assert::assertEquals(1, $countRows);
+    
+        $search = [
+            'id' => $idSetting
+        ];
+        
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        
+        Assert::assertEmpty($result->toNative());
+    }
 }

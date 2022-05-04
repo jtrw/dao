@@ -61,6 +61,87 @@ class QueryTest extends TestCase
         Assert::assertEquals($result[1]['id'], $values[0]['id']);
     }
     
+    public function testLimitFetchAlll()
+    {
+        $query = new Query($this->db);
+        
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'testQueryLimit',
+            'value'     => 'dataTestQueryLimit'
+        ];
+        
+        $this->createItem($values);
+        
+        $result = $query->select("caption")
+            ->table(static::TABLE_SETTINGS)
+            ->limit(2, 0)
+            ->orderBy("id DESC")
+            ->fetchAll();
+        
+        Assert::assertCount(2, $result);
+        
+        Assert::assertEquals($result[0]['caption'], $values['caption']);
+    }
+    
+    public function testJoin()
+    {
+        $query = new Query($this->db);
+    
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'testJoinParent',
+            'value'     => 'dataJoinTest'
+        ];
+    
+        $id = $this->createItem($values);
+        
+        $values = [
+            'id_parent' => $id,
+            'caption'   => 'testJoin',
+            'value'     => 'dataJoinTest'
+        ];
+    
+        $this->createItem($values);
+        
+        $result = $query->select("s2.caption")
+            ->table(static::TABLE_SETTINGS)
+            ->join("INNER JOIN ".static::TABLE_SETTINGS." as s2 ON settings.id = s2.id_parent")
+            ->orderBy("s2.id DESC")
+            ->fetchAll();
+    
+        Assert::assertEquals($result[0]['caption'], $values['caption']);
+    }
+    
+    public function testJoins()
+    {
+        $query = new Query($this->db);
+        
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'testJoinsParent',
+            'value'     => 'dataJoinsTest'
+        ];
+        
+        $id = $this->createItem($values);
+        
+        $values = [
+            'id_parent' => $id,
+            'caption'   => 'testJoins',
+            'value'     => 'dataJoinTest'
+        ];
+        
+        $this->createItem($values);
+        
+        $result = $query->select("s2.caption")
+            ->table(static::TABLE_SETTINGS)
+            ->joins(["INNER JOIN ".static::TABLE_SETTINGS." as s2 ON settings.id = s2.id_parent"])
+            ->orderBy("s2.id DESC")
+            ->fetchAll();
+        
+        Assert::assertEquals($result[0]['caption'], $values['caption']);
+    }
+    
     private function createItems(): array
     {
         $values = [

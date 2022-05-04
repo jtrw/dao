@@ -24,7 +24,7 @@ class Query implements QueryInterface
     /**
      * @var string
      */
-    protected string $table;
+    protected string $table = "";
 
     /**
      * @var array
@@ -185,7 +185,7 @@ class Query implements QueryInterface
         $having = $this->connection->getSqlCondition($this->having);
 
         if (!$this->table) {
-            throw new DatabaseException("Undefined from fro query");
+            throw new DatabaseException("Table Not Found From Query");
         }
 
         return $driver->createSelectQuery(

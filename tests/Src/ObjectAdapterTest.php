@@ -201,7 +201,36 @@ class ObjectAdapterTest extends TestCase
         );
     }
     
-    public function testTransactions()
+    public function testSuccessTransactions()
+    {
+        $this->db->begin();
+        
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'TRANSACTION_BEGIN',
+            'value'     => 'dataTest'
+        ];
+        $this->db->insert(static::TABLE_SETTINGS, $values);
+    
+        $values['caption'] = "TRANSACTION2_BEGIN";
+    
+        $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
+        
+        $this->db->commit();
+        
+        Assert::assertNotEmpty($idSetting);
+        $search = [
+            'id' => $idSetting
+        ];
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        $resultData = $result->toNative();
+        Assert::assertNotEmpty($resultData);
+        Assert::assertEquals($resultData['id'], $idSetting);
+    }
+    
+    public function testRollbackTransactions()
     {
         $idSetting = 0;
         try {

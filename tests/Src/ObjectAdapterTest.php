@@ -24,7 +24,7 @@ class ObjectAdapterTest extends TestCase
     {
         $sql = "SELECT CURRENT_DATE";
         $date = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ONE)->toNative();
-
+        
         Assert::assertEquals($date, date("Y-m-d"));
     }
     
@@ -63,7 +63,7 @@ class ObjectAdapterTest extends TestCase
                 'caption'   => 'massTest2',
                 'value'     => 'dataMassTest2'
             ]
-            
+        
         ];
         $this->db->massInsert(static::TABLE_SETTINGS, $values);
         
@@ -114,8 +114,9 @@ class ObjectAdapterTest extends TestCase
         
         $result = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ALL);
         Assert::assertInstanceOf(ValueObjectInterface::class, $result);
-    
+        
         $resultData = $result->toNative();
+        
         Assert::assertNotEmpty($resultData[0]);
         $currentValue = $resultData[0];
         
@@ -129,12 +130,12 @@ class ObjectAdapterTest extends TestCase
         
         $result = $this->db->update(static::TABLE_SETTINGS, $values, $search);
         Assert::assertIsInt($result);
-    
+        
         $sql = "SELECT * FROM settings";
-
+        
         $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
         Assert::assertInstanceOf(ValueObjectInterface::class, $result);
-    
+        
         $resultData = $result->toNative();
         Assert::assertNotEmpty($resultData);
         Assert::assertEquals($resultData['value'], $values['value']);
@@ -151,9 +152,9 @@ class ObjectAdapterTest extends TestCase
         Assert::assertIsInt($idSetting);
         
         $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $idSetting]);
-
+        
         Assert::assertEquals(1, $countRows);
-    
+        
         $search = [
             'id' => $idSetting
         ];
@@ -163,5 +164,39 @@ class ObjectAdapterTest extends TestCase
         $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
         
         Assert::assertEmpty($result->toNative());
+    }
+    
+    public function testAssoc()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+    
+        $fetchAssocObject = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ASSOC);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $fetchAssocObject);
+        
+        $fetchAllObject = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ALL);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $fetchAllObject);
+    
+        $assocData = $fetchAssocObject->toNative();
+        $allData = $fetchAllObject->toNative();
+        Assert::assertNotEmpty($allData[0]);
+
+        Assert::assertEquals($assocData[$allData[0]['id']]['value'], $allData[0]['value']);
+    }
+    
+    public function testGetDataBaseType()
+    {
+        Assert::assertEquals(DbConnector::DRIVER_MYSQL, $this->db->getDatabaseType());
+    }
+    
+    public function testGetTables()
+    {
+        $this->assertSame(
+            $this->db->getTables(),
+            [
+                "settings",
+                "site_contents",
+                "site_contents2settings"
+            ]
+        );
     }
 }

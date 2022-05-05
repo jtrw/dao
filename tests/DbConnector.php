@@ -5,6 +5,7 @@ namespace Jtrw\DAO\Tests;
 use Jtrw\DAO\DataAccessObject;
 use Jtrw\DAO\DataAccessObjectInterface;
 use RuntimeException;
+use PDO;
 
 class DbConnector
 {
@@ -14,6 +15,10 @@ class DbConnector
      * @var DataAccessObjectInterface[]
      */
     public static array $db = [
+        self::DRIVER_MYSQL => null
+    ];
+    
+    public static array $sourcePDO = [
         self::DRIVER_MYSQL => null
     ];
     
@@ -32,6 +37,9 @@ class DbConnector
             getenv('MYSQL_USER'),
             getenv('MYSQL_PASSWORD')
         );
+    
+        static::$sourcePDO[static::DRIVER_MYSQL] = $db;
+        
         return DataAccessObject::factory($db);
     }
     
@@ -42,5 +50,14 @@ class DbConnector
         }
         
         throw new RuntimeException("Driver Not be Initialized");
+    }
+    
+    public static function getSourcePdo(string $driver = self::DRIVER_MYSQL): PDO
+    {
+        if (null !== static::$sourcePDO[$driver]) {
+            return static::$sourcePDO[$driver];
+        }
+    
+        throw new RuntimeException("PDO Not be Initialized");
     }
 }

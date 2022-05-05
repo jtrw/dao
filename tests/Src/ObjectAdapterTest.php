@@ -3,6 +3,7 @@
 namespace Jtrw\DAO\Tests\Src;
 
 use Jtrw\DAO\DataAccessObjectInterface;
+use Jtrw\DAO\Exceptions\DatabaseException;
 use Jtrw\DAO\Tests\DbConnector;
 use Jtrw\DAO\ValueObject\ValueObjectInterface;
 use PHPUnit\Framework\Assert;
@@ -190,7 +191,7 @@ class ObjectAdapterTest extends TestCase
     
     public function testGetTables()
     {
-        $this->assertSame(
+        Assert::assertSame(
             $this->db->getTables(),
             [
                 "settings",
@@ -198,5 +199,38 @@ class ObjectAdapterTest extends TestCase
                 "site_contents2settings"
             ]
         );
+    }
+    
+    public function testTransactions()
+    {
+        $idSetting = 0;
+        try {
+            $this->db->begin();
+    
+            $values = [
+                'id_parent' => 0,
+                'caption'   => 'TRANSACTION_BEGIN',
+                'value'     => 'dataTest'
+            ];
+            $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
+    
+            $values = [
+                'failed_field' => 0,
+            ];
+            $this->db->insert(static::TABLE_SETTINGS, $values);
+            
+            $this->db->commit();
+        } catch (DatabaseException $exp) {
+            $this->db->rollback();
+        }
+        
+        Assert::assertNotEmpty($idSetting);
+        $search = [
+            'id' => $idSetting
+        ];
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        Assert::assertEmpty($result->toNative());
     }
 }

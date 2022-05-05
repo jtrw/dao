@@ -11,6 +11,15 @@ use Jtrw\DAO\Exceptions\DatabaseException;
 abstract class AbstractObjectDriver implements ObjectDriverInterface
 {
     /**
+     * @param int $code
+     * @return int
+     */
+    public function getErrorCode(int $code): int
+    {
+        return $code;
+    }
+    
+    /**
      * @param array $columns
      * @param string $from
      * @param array|null $joins

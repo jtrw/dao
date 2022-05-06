@@ -170,17 +170,17 @@ class ObjectAdapterTest extends TestCase
     public function testAssoc()
     {
         $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
-    
+        
         $fetchAssocObject = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ASSOC);
         Assert::assertInstanceOf(ValueObjectInterface::class, $fetchAssocObject);
         
         $fetchAllObject = $this->db->select($sql, [], [], DataAccessObjectInterface::FETCH_ALL);
         Assert::assertInstanceOf(ValueObjectInterface::class, $fetchAllObject);
-    
+        
         $assocData = $fetchAssocObject->toNative();
         $allData = $fetchAllObject->toNative();
         Assert::assertNotEmpty($allData[0]);
-
+        
         Assert::assertEquals($assocData[$allData[0]['id']]['value'], $allData[0]['value']);
     }
     
@@ -211,9 +211,9 @@ class ObjectAdapterTest extends TestCase
             'value'     => 'dataTest'
         ];
         $this->db->insert(static::TABLE_SETTINGS, $values);
-    
+        
         $values['caption'] = "TRANSACTION2_BEGIN";
-    
+        
         $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
         
         $this->db->commit();
@@ -235,14 +235,14 @@ class ObjectAdapterTest extends TestCase
         $idSetting = 0;
         try {
             $this->db->begin();
-    
+            
             $values = [
                 'id_parent' => 0,
                 'caption'   => 'TRANSACTION_BEGIN',
                 'value'     => 'dataTest'
             ];
             $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
-    
+            
             $values = [
                 'failed_field' => 0,
             ];
@@ -261,5 +261,24 @@ class ObjectAdapterTest extends TestCase
         
         $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
         Assert::assertEmpty($result->toNative());
+    }
+    
+    public function testSelectIn()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            'id&IN' => [1, 2, 3],
+            'id&NOT IN' => [4]
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $resultData = $result->toNative();
+        Assert::assertNotEmpty($resultData['0']['id']);
+        Assert::assertEquals($resultData['0']['id'], 1);
+        
+        Assert::assertNotEmpty($resultData['1']['id']);
+        Assert::assertEquals($resultData['1']['id'], 2);
+        
+        Assert::assertNotEmpty($resultData['2']['id']);
+        Assert::assertEquals($resultData['2']['id'], 3);
     }
 }

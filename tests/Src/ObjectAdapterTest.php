@@ -282,7 +282,7 @@ class ObjectAdapterTest extends TestCase
         Assert::assertEquals($resultData['2']['id'], 3);
     }
     
-    public function testSelectOr()
+    public function testSqlOr()
     {
         $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
         $search = [
@@ -297,5 +297,17 @@ class ObjectAdapterTest extends TestCase
         ];
         $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
         Assert::assertNotEmpty($result->toNative());
+    }
+    
+    public function testOrSql()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "&or_sql" => ["id = 2", "id = 3"]
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $resultData = $result->toNative();
+        Assert::assertCount(2, $resultData);
+        //Assert::assertNotEmpty($result->toNative());
     }
 }

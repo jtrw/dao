@@ -281,4 +281,21 @@ class ObjectAdapterTest extends TestCase
         Assert::assertNotEmpty($resultData['2']['id']);
         Assert::assertEquals($resultData['2']['id'], 3);
     }
+    
+    public function testSelectOr()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "sql_or" => [
+                [
+                    "caption&IS NOT" =>NULL
+                ],
+                [
+                    "id&!=" => 1
+                ]
+            ]
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        Assert::assertNotEmpty($result->toNative());
+    }
 }

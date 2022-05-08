@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS `settings`
   `id_parent` int(11) unsigned DEFAULT NULL,
   `caption`   varchar(128)     DEFAULT NULL,
   `value`     varchar(255)     DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY (`value`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS `site_contents`

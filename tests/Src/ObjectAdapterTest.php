@@ -152,9 +152,7 @@ class ObjectAdapterTest extends TestCase
         $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
         Assert::assertIsInt($idSetting);
         
-        $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $idSetting]);
-        
-        Assert::assertEquals(1, $countRows);
+        $this->removeSettingRow($idSetting);
         
         $search = [
             'id' => $idSetting
@@ -364,5 +362,36 @@ class ObjectAdapterTest extends TestCase
     
         Assert::assertNotEmpty($resultData[1]['id']);
         Assert::assertEquals($resultData[1]['id'], 2);
+    }
+    
+    public function testMatch()
+    {
+        
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'maches',
+            'value'     => 'Full text maches data text'
+        ];
+        $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
+        Assert::assertIsInt($idSetting);
+        
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "value&match" => "text data"
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $resultData = $result->toNative();
+        
+        Assert::assertNotEmpty($resultData[0]['value']);
+        Assert::assertEquals($resultData[0]['value'], $values['value']);
+        
+        $this->removeSettingRow($idSetting);
+    }
+    
+    private function removeSettingRow(int $id): void
+    {
+        $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $id]);
+    
+        Assert::assertEquals(1, $countRows);
     }
 }

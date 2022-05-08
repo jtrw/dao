@@ -339,6 +339,30 @@ class ObjectAdapterTest extends TestCase
         ];
         $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
         $resultData = $result->toNative();
+        // TODO: Fix this assert
         Assert::assertNotEmpty($resultData);
+    }
+    
+    public function testOr()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "id&or&<" => [
+                2,
+                [
+                    'id' => 2
+                ]
+            ]
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $resultData = $result->toNative();
+
+        Assert::assertCount(2, $resultData);
+        
+        Assert::assertNotEmpty($resultData[0]['id']);
+        Assert::assertEquals($resultData[0]['id'], 1);
+    
+        Assert::assertNotEmpty($resultData[1]['id']);
+        Assert::assertEquals($resultData[1]['id'], 2);
     }
 }

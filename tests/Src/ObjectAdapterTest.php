@@ -366,7 +366,6 @@ class ObjectAdapterTest extends TestCase
     
     public function testMatch()
     {
-        
         $values = [
             'id_parent' => 0,
             'caption'   => 'maches',
@@ -386,6 +385,18 @@ class ObjectAdapterTest extends TestCase
         Assert::assertEquals($resultData[0]['value'], $values['value']);
         
         $this->removeSettingRow($idSetting);
+    }
+    
+    public function testBetween()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "id&between" => [1,3]
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $result);
+        $resultData = $result->toNative();
+        Assert::assertCount(3, $resultData);
     }
     
     private function removeSettingRow(int $id): void

@@ -399,6 +399,30 @@ class ObjectAdapterTest extends TestCase
         Assert::assertCount(3, $resultData);
     }
     
+    public function testSoundex()
+    {
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'Soundex',
+            'value'     => 'Search for Soundex data text'
+        ];
+        $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values);
+        Assert::assertIsInt($idSetting);
+        
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            "caption&soundex" => "Soundex"
+        ];
+    
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $resultData = $result->toNative();
+    
+        Assert::assertNotEmpty($resultData[0]['value']);
+        Assert::assertEquals($resultData[0]['value'], $values['value']);
+    
+        $this->removeSettingRow($idSetting);
+    }
+    
     private function removeSettingRow(int $id): void
     {
         $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $id]);

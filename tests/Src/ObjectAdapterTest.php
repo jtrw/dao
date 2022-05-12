@@ -423,6 +423,28 @@ class ObjectAdapterTest extends TestCase
         $this->removeSettingRow($idSetting);
     }
     
+    public function testDeleteTable()
+    {
+        $tableName = "test_".time();
+        $sql = "CREATE TABLE {$tableName} (id int unsigned not null)";
+        $this->db->query($sql);
+        
+        $sqlSelect = "SELECT * FROM ".$tableName;
+        
+        $result = $this->db->select($sqlSelect, [], [], DataAccessObjectInterface::FETCH_ALL)->toNative();
+        Assert::assertEmpty($result);
+        
+        $this->db->deleteTable($tableName);
+    
+        try {
+            $this->db->select($sqlSelect, [], [], DataAccessObjectInterface::FETCH_ALL)->toNative();
+            $this->fail('DatabaseException was not thrown');
+        } catch (DatabaseException $exp) {
+            $msg = sprintf(" Table 'dao.%s' doesn't", $tableName);
+            Assert::assertStringContainsString($msg, $exp->getMessage(), "Message Not Found");
+        }
+    }
+    
     private function removeSettingRow(int $id): void
     {
         $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $id]);

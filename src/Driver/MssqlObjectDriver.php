@@ -132,7 +132,6 @@ class MssqlObjectDriver extends AbstractObjectDriver
      */
     public function getSplitOnPages(DataAccessObjectInterface $object, string $query, int $col, int $page): array
     {
-        $orderBy = null;
         $result = [
             'cnt' => 0
         ];

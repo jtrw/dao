@@ -54,3 +54,4 @@ clean: ## Clear build vendor report folders
 .PHONY: migrate
 migrate:
 	docker-compose exec -T dao_mariadb sh /tmp/initdb/simple-db.sh
+	shared-service-setup-db

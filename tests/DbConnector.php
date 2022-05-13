@@ -10,21 +10,25 @@ use PDO;
 class DbConnector
 {
     public const DRIVER_MYSQL = "mysql";
+    public const DRIVER_PGSQL = "pqsql";
     
     /**
      * @var DataAccessObjectInterface[]
      */
     public static array $db = [
-        self::DRIVER_MYSQL => null
+        self::DRIVER_MYSQL => null,
+        self::DRIVER_PGSQL => null
     ];
     
     public static array $sourcePDO = [
-        self::DRIVER_MYSQL => null
+        self::DRIVER_MYSQL => null,
+        self::DRIVER_PGSQL => null
     ];
     
     public static function init()
     {
         static::$db[static::DRIVER_MYSQL] = self::initMysql();
+      //  static::$db[static::DRIVER_PGSQL] = self::iniPgSql();
     }
     
     private static function initMysql(): DataAccessObjectInterface
@@ -39,6 +43,22 @@ class DbConnector
         );
     
         static::$sourcePDO[static::DRIVER_MYSQL] = $db;
+        
+        return DataAccessObject::factory($db);
+    }
+    
+    private static function iniPgSql(): DataAccessObjectInterface
+    {
+        $dbName = getenv('MYSQL_DATABASE');
+        $dsn = "pgsql:dbname=dao;port=5432;host=dao_postgres";
+        
+        $db = new \PDO(
+            $dsn,
+            getenv('POSTGRES_USER'),
+            getenv('POSTGRES_PASSWORD')
+        );
+        
+        static::$sourcePDO[static::DRIVER_PGSQL] = $db;
         
         return DataAccessObject::factory($db);
     }

@@ -49,9 +49,9 @@ RUN docker-php-ext-install zip
 RUN docker-php-ext-enable zip
 
 # pdo_pgsql
-#RUN apk add --no-cache postgresql-dev
-#RUN docker-php-ext-install pdo_pgsql
-#RUN docker-php-ext-enable pdo_pgsql
+RUN apk add --no-cache postgresql-dev
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-enable pdo_pgsql
 
 # opcache
 RUN docker-php-ext-install opcache

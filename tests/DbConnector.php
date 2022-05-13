@@ -28,7 +28,7 @@ class DbConnector
     public static function init()
     {
         static::$db[static::DRIVER_MYSQL] = self::initMysql();
-      //  static::$db[static::DRIVER_PGSQL] = self::iniPgSql();
+        static::$db[static::DRIVER_PGSQL] = self::iniPgSql();
     }
     
     private static function initMysql(): DataAccessObjectInterface
@@ -51,11 +51,10 @@ class DbConnector
     {
         $dbName = getenv('MYSQL_DATABASE');
         $dsn = "pgsql:dbname=dao;port=5432;host=dao_postgres";
-        
         $db = new \PDO(
             $dsn,
-            getenv('POSTGRES_USER'),
-            getenv('POSTGRES_PASSWORD')
+            'postgres_user',
+            'postgres_pass'
         );
         
         static::$sourcePDO[static::DRIVER_PGSQL] = $db;

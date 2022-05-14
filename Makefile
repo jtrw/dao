@@ -54,3 +54,13 @@ clean: ## Clear build vendor report folders
 .PHONY: migrate
 migrate:
 	docker-compose exec -T dao_mariadb sh /tmp/initdb/simple-db.sh
+	postgres-setup-db
+
+.PHONY: migrate-pgsql
+migrate-pgsql:
+	docker-compose exec -T dao_postgres sh /tmp/initdb/simple-db.sh
+
+.PHONY: postgres-setup-db
+postgres-setup-db:
+	docker-compose exec dao_postgres bash -c "if PGPASSWORD=postgres_pass psql -U postgres_user -w -lqtA | cut -d \| -f 1 | grep $(POSTGRESQL_DB); then echo DB $(NEW_DB_NAME) already exists; else PGPASSWORD=postgres_pass createdb -U postgres_user -w $(POSTGRESQL_DB); fi"
+

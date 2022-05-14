@@ -49,14 +49,9 @@ RUN apk add --no-cache curl
 #RUN docker-php-ext-enable zip
 
 # pdo_pgsql
-#RUN apk add --no-cache postgresql-dev
-#RUN docker-php-ext-install pdo_pgsql
-#RUN docker-php-ext-enable pdo_pgsql
-
-# pdo_pgsql
-#RUN apk add --no-cache postgresql-dev
-#RUN docker-php-ext-install pdo_pgsql
-#RUN docker-php-ext-enable pdo_pgsql
+RUN apk add --no-cache postgresql-dev
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-enable pdo_pgsql
 
 # mysql
 RUN docker-php-ext-install mysqli

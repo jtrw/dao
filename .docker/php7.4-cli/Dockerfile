@@ -59,9 +59,9 @@ RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-enable pdo_mysql
 
 # pdo_pgsql
-#RUN apk add --no-cache postgresql-dev
-#RUN docker-php-ext-install pdo_pgsql
-#RUN docker-php-ext-enable pdo_pgsql
+RUN apk add --no-cache postgresql-dev
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-enable pdo_pgsql
 
 # pcntl
 RUN docker-php-ext-install pcntl

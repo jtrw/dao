@@ -15,6 +15,8 @@ abstract class AbstractTestObjectAdapter extends TestCase
     
     public DataAccessObjectInterface $db;
     
+    abstract public function testGetDataBaseType();
+    
     public function testCurrentDate()
     {
         $sql = "SELECT CURRENT_DATE";
@@ -174,11 +176,6 @@ abstract class AbstractTestObjectAdapter extends TestCase
         Assert::assertNotEmpty($allData[0]);
         
         Assert::assertEquals($assocData[$allData[0]['id']]['value'], $allData[0]['value']);
-    }
-    
-    public function testGetDataBaseType()
-    {
-        Assert::assertEquals(DbConnector::DRIVER_MYSQL, $this->db->getDatabaseType());
     }
     
     public function testGetTables()

@@ -7,9 +7,9 @@ host="$POSTGRESQL_HOST"
 password="$POSTGRES_PASSWORD"
 
 
-if psql -U postgres_user -w -lqtA | grep "$database";
+if psql -U postgres_user -w -lqtA | cut -d \| -f 1 | grep "$database";
 then
-  echo DB $database already exists;
+  echo "DB "$database" already exists";
 else
   PGPASSWORD=postgres_pass createdb -U postgres_user -w $database;
 fi

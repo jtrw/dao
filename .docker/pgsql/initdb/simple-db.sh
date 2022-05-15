@@ -3,9 +3,12 @@
 # Creating databases
 filename=/tmp/initdb/dump/create.pgsql.sql
 database="$POSTGRESQL_DB"
+database="dao"
 host="$POSTGRESQL_HOST"
+host="dao_postgres"
 password="$POSTGRES_PASSWORD"
 
+psql -U postgres_user -c 'DROP DATABASE dao'
 
 if psql -U postgres_user -w -lqtA | cut -d \| -f 1 | grep "dao";
 then
@@ -25,7 +28,7 @@ fi
 echo "Importing "$database" database..\n"
 export PGPASSWORD=$password
 psql \
--h=$host \
+-h $host \
 -U "${POSTGRES_USER}" \
 -d $database < $filename
 echo "Done!"

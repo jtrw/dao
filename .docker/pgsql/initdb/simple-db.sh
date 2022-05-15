@@ -7,11 +7,17 @@ host="$POSTGRESQL_HOST"
 password="$POSTGRES_PASSWORD"
 
 
+if psql -U postgres_user -w -lqtA | grep "$database";
+then
+  echo DB $database already exists;
+else
+  PGPASSWORD=postgres_pass createdb -U postgres_user -w $database;
+fi
+
 #sleep 5;
 #echo "Creating "$database" database..."
-#mysql \
+#psql \
 #--user='root' \
-#--password="${MYSQL_ROOT_PASSWORD}" \
 #--execute "DROP DATABASE IF EXISTS $database; CREATE DATABASE $database;"
 #echo "Done!"
 

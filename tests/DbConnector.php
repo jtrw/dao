@@ -10,7 +10,7 @@ use PDO;
 class DbConnector
 {
     public const DRIVER_MYSQL = "mysql";
-    public const DRIVER_PGSQL = "pqsql";
+    public const DRIVER_PGSQL = "pgsql";
     
     /**
      * @var DataAccessObjectInterface[]

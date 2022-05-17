@@ -343,7 +343,7 @@ abstract class AbstractTestObjectAdapter extends TestCase
                 ]
             ]
         ];
-        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+        $result = $this->db->select($sql, $search, ['id ASC'], DataAccessObjectInterface::FETCH_ALL);
         $resultData = $result->toNative();
 
         Assert::assertCount(2, $resultData);

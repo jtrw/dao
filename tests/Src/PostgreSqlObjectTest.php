@@ -25,11 +25,6 @@ class PostgreSqlObjectTest extends AbstractTestObjectAdapter
         Assert::assertTrue(true);
     }
     
-    public function testSoundex()
-    {
-        Assert::assertTrue(true);
-    }
-    
     public function testDeleteTable()
     {
         $tableName = "test_".time();

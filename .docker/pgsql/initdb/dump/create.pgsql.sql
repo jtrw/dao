@@ -24,3 +24,5 @@ CREATE TABLE IF NOT EXISTS site_contents2settings
   id_setting integer,
   CONSTRAINT site_contents2settings_pkey PRIMARY KEY (id)
 );
+
+CREATE EXTENSION fuzzystrmatch;

@@ -17,4 +17,11 @@ class MysqlObjectTest extends AbstractTestObjectAdapter
     {
         Assert::assertEquals(DbConnector::DRIVER_MYSQL, $this->db->getDatabaseType());
     }
+    
+    public function testGetTableIndexes()
+    {
+        $indexes = $this->db->getTableIndexes(static::TABLE_SETTINGS);
+        Assert::assertNotEmpty($indexes[0]['Table']);
+        Assert::assertEquals($indexes[0]['Table'], 'settings');
+    }
 }

@@ -46,4 +46,11 @@ class PostgreSqlObjectTest extends AbstractTestObjectAdapter
             Assert::assertStringContainsString($msg, $exp->getMessage(), "Message Not Found");
         }
     }
+    
+    public function testGetTableIndexes()
+    {
+        $indexes = $this->db->getTableIndexes(static::TABLE_SETTINGS);
+        Assert::assertNotEmpty($indexes[0]['table']);
+        Assert::assertEquals($indexes[0]['table'], 'settings_pkey');
+    }
 }

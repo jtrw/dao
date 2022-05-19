@@ -61,6 +61,17 @@ services:
       timeout: 10s
       retries: 3
 
+  dao_mssql:
+    container_name: ${APP_COMPOSE_PROJECT_NAME}_mssql_db
+    image: 'mcr.microsoft.com/mssql/server'
+    ports:
+      - '1433:1433'
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=mssql_rootpw
+    volumes:
+      - dao_mssql_db:/var/opt/mssql
+
 networks:
   dao-network:
     name: dao-network
@@ -69,3 +80,4 @@ networks:
 volumes:
   dao_mariadb_db:
   dao_postgres_db:
+  dao_mssql_db:

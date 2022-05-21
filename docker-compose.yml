@@ -63,14 +63,15 @@ services:
 
   dao_mssql:
     container_name: ${APP_COMPOSE_PROJECT_NAME}_mssql_db
-    image: 'mcr.microsoft.com/mssql/server'
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
     ports:
-      - '1433:1433'
+      - 1433:1433
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=mssql_rootpw
+      - SA_PASSWORD=Mssql_Rootpw!
     volumes:
-      - dao_mssql_db:/var/opt/mssql
+      - dao_mssql_db:/var/opt/mssql/data
 
 networks:
   dao-network:

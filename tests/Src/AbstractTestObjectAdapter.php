@@ -438,6 +438,11 @@ abstract class AbstractTestObjectAdapter extends TestCase
         }
     }
     
+    public function testSetForeignKeyChecks()
+    {
+        $this->db->setForeignKeyChecks(true);
+    }
+    
     private function removeSettingRow(int $id): void
     {
         $countRows = $this->db->delete(static::TABLE_SETTINGS, ['id' => $id]);

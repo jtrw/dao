@@ -36,10 +36,6 @@ $search = [
      ];
 ```
 
-## Unittest
-
-`php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors`
-
 ### Conditions
 
 |    key           |    value                                                   |    result                                  |
@@ -65,3 +61,15 @@ $search = [
 |`col&between`     |`array(3, 7)`                                               |`"col" BETWEEN '3' AND '7'`                 |
 |`col&between`     |`'3 AND 7'`                                                 |`"col" BETWEEN 3 AND 7`                     |
 |`col&soundex`     |`'val1'`                                                    |`SOUNDEX(col) = SOUNDEX('val1')`            |
+
+## Env
+
+`make install`
+
+`make start`
+
+`make stop`
+
+## Unittest
+
+`php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors`

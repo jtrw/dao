@@ -8,7 +8,7 @@ include .make/utils.mk
 include .make/docker-compose-shared-services.mk
 
 .PHONY: install
-install: erase build start-all wait## clean current environment, recreate dependencies and spin up again;
+install: erase build start wait## clean current environment, recreate dependencies and spin up again;
 
 .PHONY: install-lite
 install-lite: build start

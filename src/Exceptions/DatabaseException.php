@@ -48,9 +48,9 @@ class DatabaseException extends \Exception
      */
     public static function throwError(int $code)
     {
-        $messages = array(
+        $messages = [
             static::ERROR_UNSUPPORTABLE_METHOD => "Unsupportable method"
-        );
+        ];
 
         $message = "";
         if (array_key_exists($code, $messages)) {

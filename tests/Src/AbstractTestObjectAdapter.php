@@ -434,6 +434,7 @@ abstract class AbstractTestObjectAdapter extends TestCase
             $this->fail('DatabaseException was not thrown');
         } catch (DatabaseException $exp) {
             $msg = sprintf(" Table 'dao.%s' doesn't", $tableName);
+            Assert::assertEquals($exp->getQuery(), $sqlSelect);
             Assert::assertStringContainsString($msg, $exp->getMessage(), "Message Not Found");
         }
     }

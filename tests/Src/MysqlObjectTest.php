@@ -2,7 +2,9 @@
 
 namespace Jtrw\DAO\Tests\Src;
 
+use Jtrw\DAO\DataAccessObjectInterface;
 use Jtrw\DAO\Tests\DbConnector;
+use Jtrw\DAO\ValueObject\ValueObjectInterface;
 use PHPUnit\Framework\Assert;
 
 class MysqlObjectTest extends AbstractTestObjectAdapter
@@ -23,5 +25,27 @@ class MysqlObjectTest extends AbstractTestObjectAdapter
         $indexes = $this->db->getTableIndexes(static::TABLE_SETTINGS);
         Assert::assertNotEmpty($indexes[0]['Table']);
         Assert::assertEquals($indexes[0]['Table'], 'settings');
+    }
+    
+    public function testInsertForUpdate()
+    {
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'test',
+            'value'     => 'dataTest'
+        ];
+        $idSetting = $this->db->insert(static::TABLE_SETTINGS, $values, true);
+        Assert::assertIsInt($idSetting);
+        
+        $sql = "SELECT * FROM settings";
+        $search = [
+            'id' => $idSetting
+        ];
+        $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW);
+        Assert::assertInstanceOf(ValueObjectInterface::class, $result);
+        
+        $resultData = $result->toNative();
+        Assert::assertNotEmpty($resultData);
+        Assert::assertEquals($values['value'], $resultData['value']);
     }
 }

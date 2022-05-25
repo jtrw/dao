@@ -5,6 +5,7 @@ namespace Jtrw\DAO\Tests\Src;
 use Jtrw\DAO\DataAccessObjectInterface;
 use Jtrw\DAO\Exceptions\DatabaseException;
 use Jtrw\DAO\Tests\DbConnector;
+use Jtrw\DAO\ValueObject\ValueObjectInterface;
 use PHPUnit\Framework\Assert;
 
 class PostgreSqlObjectTest extends AbstractTestObjectAdapter
@@ -52,5 +53,20 @@ class PostgreSqlObjectTest extends AbstractTestObjectAdapter
         $indexes = $this->db->getTableIndexes(static::TABLE_SETTINGS);
         Assert::assertNotEmpty($indexes[0]['table']);
         Assert::assertEquals($indexes[0]['table'], 'settings_pkey');
+    }
+    
+    public function testInsertForUpdate()
+    {
+        $values = [
+            'id_parent' => 0,
+            'caption'   => 'test',
+            'value'     => 'dataTest'
+        ];
+        try {
+            $this->db->insert(static::TABLE_SETTINGS, $values, true);
+            Assert::fail("DatabaseException was not thrown");
+        } catch (DatabaseException $exp) {
+            Assert::assertEquals($exp->getMessage(), "Method Insert Not Support Third Param For pgsql DB Type.");
+        }
     }
 }

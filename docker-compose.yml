@@ -31,7 +31,7 @@ services:
     volumes:
       - ./.docker/mysql/conf.d/:/etc/mysql/conf.d/source/
       - ./.docker/mysql/initdb:/tmp/initdb/
-      - dao_mariadb_db:/var/lib/mysql
+      - store_mariadb_db:/var/lib/mysql
     restart: always
     ports:
       - 3307:3306
@@ -51,7 +51,7 @@ services:
       POSTGRES_USER: "postgres_user"
       POSTGRES_PASSWORD: "postgres_pass"
     volumes:
-      - dao_postgres_db:/var/lib/postgresql/data
+      - store_postgres_db:/var/lib/postgresql/data
       - ./.docker/pgsql/initdb:/tmp/initdb/
     ports:
       - 5432:5432
@@ -79,6 +79,6 @@ networks:
     driver: bridge
 
 volumes:
-  dao_mariadb_db:
-  dao_postgres_db:
+  store_mariadb_db:
+  store_postgres_db:
   #dao_mssql_db:

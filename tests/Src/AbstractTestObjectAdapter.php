@@ -19,6 +19,8 @@ abstract class AbstractTestObjectAdapter extends TestCase
     
     abstract public function testGetTableIndexes();
     
+    abstract public function testInsertForUpdate();
+    
     public function testCurrentDate()
     {
         $sql = "SELECT CURRENT_DATE";

@@ -1,6 +1,12 @@
 # Data Access Object
 
-[![codecov](https://codecov.io/gh/jtrw/dao/branch/master/graph/badge.svg?token=FYMTSQDQP5)](https://codecov.io/gh/jtrw/dao)
+[![Phpunit](https://github.com/jtrw/dao/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/jtrw/dao/actions)
+[![Codecov](https://codecov.io/gh/jtrw/dao/branch/master/graph/badge.svg?token=FYMTSQDQP5)](https://codecov.io/gh/jtrw/dao)
+[![Latest Stable Version](http://poser.pugx.org/jtrw/dao/v)](https://packagist.org/packages/jtrw/dao)
+[![Total Downloads](http://poser.pugx.org/jtrw/dao/downloads)](https://packagist.org/packages/jtrw/dao)
+[![Latest Unstable Version](http://poser.pugx.org/jtrw/dao/v/unstable)](https://packagist.org/packages/jtrw/dao)
+[![License](http://poser.pugx.org/jtrw/dao/license)](https://packagist.org/packages/jtrw/dao)
+[![PHP Version Require](http://poser.pugx.org/jtrw/dao/require/php)](https://packagist.org/packages/jtrw/dao)
 
 PDO Usage
 ===================

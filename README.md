@@ -8,6 +8,9 @@
 [![License](http://poser.pugx.org/jtrw/dao/license)](https://packagist.org/packages/jtrw/dao)
 [![PHP Version Require](http://poser.pugx.org/jtrw/dao/require/php)](https://packagist.org/packages/jtrw/dao)
 
+Data Access Object is tiny wrapper on php PDO. There was add more comfortable methods usage conditions in select query.
+
+
 PDO Usage
 ===================
 

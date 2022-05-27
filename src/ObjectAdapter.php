@@ -714,11 +714,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             return true;
         }
         
-        if (is_null($value)) {
-            return true;
-        }
-        
-        return false;
+        return is_null($value);
     } // end _isNull
     
     /**
@@ -744,9 +740,10 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     
     /**
      * @param bool $isEnable
-     * @return bool|void
+     *
+     * @return void
      */
-    public function setForeignKeyChecks(bool $isEnable = true)
+    public function setForeignKeyChecks(bool $isEnable = true): void
     {
         $this->getDriver()->setForeignKeyChecks($this, $isEnable);
     } // end setForeignKeyChecks

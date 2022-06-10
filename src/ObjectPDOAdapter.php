@@ -31,7 +31,7 @@ class ObjectPDOAdapter extends ObjectAdapter
     /**
      * @param PDO $db
      */
-    public function setAttributes(PDO $db)
+    public function setAttributes(PDO $db): void
     {
         $this->db = $db;
         $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);

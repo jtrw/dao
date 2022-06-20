@@ -48,4 +48,12 @@ class MysqlObjectTest extends AbstractTestObjectAdapter
         Assert::assertNotEmpty($resultData);
         Assert::assertEquals($values['value'], $resultData['value']);
     }
+    
+//    public function testGetSplitOnPages()
+//    {
+//        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+//        $result = $this->db->getSplitOnPages($sql, 10, 1);
+//
+//        Assert::assertIsArray($result);
+//    }
 }

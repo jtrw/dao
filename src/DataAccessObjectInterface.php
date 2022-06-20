@@ -197,4 +197,13 @@ interface DataAccessObjectInterface
      * @return string
      */
     public function getDatabaseType(): string;
+    
+    /**
+     * @param string $query
+     * @param int $col
+     * @param int $page
+     *
+     * @return array
+     */
+    //public function getSplitOnPages(string $query, int $col, int $page): array;
 }

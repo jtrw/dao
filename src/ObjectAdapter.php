@@ -759,6 +759,18 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     } // end deleteTable
     
     /**
+     * @param string $query
+     * @param int $col
+     * @param int $page
+     *
+     * @return array
+     */
+    public function getSplitOnPages(string $query, int $col, int $page): array
+    {
+        return $this->getDriver()->getSplitOnPages($this, $query, $col, $page);
+    }
+    
+    /**
      * @param string $sql
      * @param array $values
      * @return string

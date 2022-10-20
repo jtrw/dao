@@ -131,10 +131,10 @@ interface DataAccessObjectInterface
     //Copy
     /**
      * @param string $obj
-     * @param int|null $type
+     * @param int $type
      * @return string
      */
-    public function quote(string $obj, int $type = null): string;
+    public function quote(string $obj, int $type = 0): string;
     
     /**
      * @param string $sql

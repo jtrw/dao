@@ -42,10 +42,10 @@ class ObjectPDOAdapter extends ObjectAdapter
     
     /**
      * @param string $obj
-     * @param int|null $type
+     * @param int $type
      * @return string
      */
-    public function quote(string $obj, int $type = null): string
+    public function quote(string $obj, int $type = 0): string
     {
         return $this->db->quote($obj, $type);
     } // end quote

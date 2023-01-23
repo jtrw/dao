@@ -799,7 +799,8 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
         $rows = [];
         
         foreach ($values as $field => $value) {
-            $rows[] = $field." = ".$value;
+            $column = $this->quoteColumnName($field);
+            $rows[] = $column." = ".$value;
         }
         
         $sql .= implode(", ", $rows);

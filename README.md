@@ -43,7 +43,12 @@ $search = [
        'columnName3&<'  => 7,
        'columnName4&>=' => 3
      ];
+
+$sql = "SELECT * FROM users";
+$db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL)->toNative();
 ```
+
+
 
 ### Conditions
 

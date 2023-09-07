@@ -198,6 +198,8 @@ interface DataAccessObjectInterface
      */
     public function getDatabaseType(): string;
     
+    public function getSelectSQL(array $condition, string $sql, array $orderBy = []): string;
+    
     /**
      * @param string $query
      * @param int $col

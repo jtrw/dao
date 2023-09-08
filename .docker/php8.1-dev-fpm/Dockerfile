@@ -34,20 +34,6 @@ RUN docker-php-ext-enable intl
 RUN docker-php-ext-install opcache
 RUN docker-php-ext-enable opcache
 
-# amqp
-#RUN apk add --no-cache rabbitmq-c-dev
-#RUN pecl install amqp
-#RUN docker-php-ext-enable amqp
-
-# redis
-RUN pecl install redis
-RUN docker-php-ext-enable redis
-
-# zip
-RUN apk add --no-cache libzip-dev
-RUN docker-php-ext-install zip
-RUN docker-php-ext-enable zip
-
 # pdo_pgsql
 RUN apk add --no-cache postgresql-dev
 RUN docker-php-ext-install pdo_pgsql
@@ -68,12 +54,6 @@ RUN apk add --no-cache git unzip
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-#develop layer
-RUN apk add --no-cache gnupg
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
-RUN pecl install ast
-RUN docker-php-ext-enable ast
 
 # pcntl
 RUN docker-php-ext-install pcntl

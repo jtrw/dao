@@ -635,7 +635,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param array $condition
      * @param array|bool $orderBy
      * @param int $type
-     * @return array
+     * @return ValueObjectInterface
      * @throws DatabaseException
      */
     public function select(

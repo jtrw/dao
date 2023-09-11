@@ -34,6 +34,14 @@ RUN docker-php-ext-enable intl
 RUN docker-php-ext-install opcache
 RUN docker-php-ext-enable opcache
 
+# mysql
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-enable mysqli
+
+# pdo
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-enable pdo_mysql
+
 # pdo_pgsql
 RUN apk add --no-cache postgresql-dev
 RUN docker-php-ext-install pdo_pgsql

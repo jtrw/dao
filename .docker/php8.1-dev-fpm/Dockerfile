@@ -39,6 +39,13 @@ RUN apk add --no-cache git unzip
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+#develop layer
+RUN apk add --no-cache gnupg
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+RUN pecl install ast
+RUN docker-php-ext-enable ast
+
 # pcntl
 RUN docker-php-ext-install pcntl
 RUN docker-php-ext-enable pcntl

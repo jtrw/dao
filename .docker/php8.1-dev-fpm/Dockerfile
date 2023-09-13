@@ -9,6 +9,11 @@ RUN apk add --no-cache automake
 
 # php extensions
 
+# mcrypt
+RUN apk add --no-cache libmcrypt-dev
+RUN pecl install mcrypt
+RUN docker-php-ext-enable mcrypt
+
 # intl
 RUN apk add --no-cache icu-dev
 RUN docker-php-ext-install intl

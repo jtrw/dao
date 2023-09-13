@@ -25,7 +25,8 @@ services:
 
   dao_mariadb:
     container_name: ${APP_COMPOSE_PROJECT_NAME}_mysql
-    image: mariadb:latest
+    #image: mariadb:latest
+    image: mysql:8.0
     networks:
       - dao-network
     volumes:

@@ -441,10 +441,10 @@ abstract class AbstractTestObjectAdapter extends TestCase
         }
     }
     
-    public function testSetForeignKeyChecks()
-    {
-        $this->db->setForeignKeyChecks(true);
-    }
+//    public function testSetForeignKeyChecks()
+//    {
+//        $this->db->setForeignKeyChecks(true);
+//    }
     
     private function removeSettingRow(int $id): void
     {

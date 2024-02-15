@@ -26,7 +26,7 @@ $db->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 $db->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL); 
 
 
-$res = $db->query('SET NAMES utf8');
+$res = $db->query('SET NAMES utf8mb4');
 
 if (!$res) {
     throw new Exception('Database connection error);

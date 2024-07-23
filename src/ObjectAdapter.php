@@ -319,6 +319,16 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
     } // end getSqlCondition
     
     /**
+     * @param mixed $item
+     * @return bool
+     */
+    private function isNumeric($item): bool
+    {
+        $type = gettype($item);
+        return $type === 'integer' || $type === 'double';
+    }
+    
+    /**
      * @param string $key
      * @param $item
      * @return string
@@ -370,7 +380,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
         }
         
         if (!in_array($item, $this->reservedWords)) {
-            if (!is_numeric($item)) {
+            if (!$this->isNumeric($item)) {
                 $item = $this->quote($item);
             }
         }

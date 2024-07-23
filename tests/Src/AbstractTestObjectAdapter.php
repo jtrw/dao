@@ -441,6 +441,20 @@ abstract class AbstractTestObjectAdapter extends TestCase
         }
     }
     
+    public function testIllegalDouble()
+    {
+        $sql = "SELECT * FROM ".static::TABLE_SETTINGS;
+        $search = [
+            'caption' => '669595062e04880001128537'
+        ];
+        try {
+            $result = $this->db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ROW)->toNative();
+            Assert::assertEmpty($result);
+        } catch (DatabaseException $exp) {
+            $this->fail('DatabaseException was not thrown '.$exp->getMessage());
+        }
+    }
+
 //    public function testSetForeignKeyChecks()
 //    {
 //        $this->db->setForeignKeyChecks(true);

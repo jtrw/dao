@@ -59,3 +59,10 @@ migrate:
 .PHONY: migrate-pgsql
 migrate-pgsql:
 	docker-compose exec -T dao_postgres sh /tmp/initdb/simple-db.sh
+
+.PHONY: tests
+tests: migrate migrate-pgsql run-tests
+
+.PHONY: run-tests
+run-tests:
+	docker-compose -f $(CWD)/docker-compose.yml run --rm --no-deps dao_php sh -lc "php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors"

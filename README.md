@@ -87,3 +87,7 @@ $db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL)->toNative()
 ## Unittest
 
 `php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors`
+
+`make tests` - run all tests with migrations
+
+`make run-tests` - run all tests without migrations

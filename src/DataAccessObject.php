@@ -16,7 +16,7 @@ abstract class DataAccessObject implements DataAccessObjectFactoryInterface
         return static::create($className, $connection);
     } // end factory
 
-    public static function create(string $className, object $connection = null): DataAccessObjectInterface
+    public static function create(string $className, ?object $connection = null): DataAccessObjectInterface
     {
         $className = 'Jtrw\DAO\\'.$className;
         if (!class_exists($className)) {

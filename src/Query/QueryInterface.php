@@ -13,7 +13,7 @@ interface QueryInterface
      * @param string|null $alias
      * @return QueryInterface
      */
-    public function select(string $name, string $alias = null): QueryInterface;
+    public function select(string $name, ?string $alias = null): QueryInterface;
     
     /**
      * @param string $name
@@ -44,7 +44,7 @@ interface QueryInterface
      * @param int|null $offset
      * @return QueryInterface
      */
-    public function limit(int $limit, int $offset = null): QueryInterface;
+    public function limit(int $limit, ?int $offset = null): QueryInterface;
     
     /**
      * @param string $join

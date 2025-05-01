@@ -75,7 +75,7 @@ class Query implements QueryInterface
      * @param string|null $alias
      * @return QueryInterface
      */
-    public function select(string $name, string $alias = null): QueryInterface
+    public function select(string $name, ?string $alias = null): QueryInterface
     {
         $columnName = $alias ?? $name;
         $this->columns[$columnName] = $name;
@@ -165,7 +165,7 @@ class Query implements QueryInterface
      * @param int|null $offset
      * @return QueryInterface
      */
-    public function limit(int $limit, int $offset = null): QueryInterface
+    public function limit(int $limit, ?int $offset = null): QueryInterface
     {
         $this->offset = $offset;
         $this->limit = $limit;

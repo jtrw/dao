@@ -224,7 +224,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param string|null $tableName
      * @return array
      */
-    public function getUpdateValues(array $values, string $tableName = null): array
+    public function getUpdateValues(array $values, ?string $tableName = null): array
     {
         foreach ($values as $key => &$item) {
             if ($tableName) {
@@ -294,7 +294,7 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      * @param array|null $obj
      * @return array|mixed
      */
-    public function getSqlCondition(array $obj = null): array
+    public function getSqlCondition(?array $obj = null): array
     {
         $result = [];
         

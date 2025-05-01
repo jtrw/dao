@@ -5,7 +5,7 @@ interface DataAccessObjectFactoryInterface
 {
     public static function factory(object $connection): DataAccessObjectInterface;
 
-    public static function create(string $className, object $connection = null): DataAccessObjectInterface;
+    public static function create(string $className, ?object $connection = null): DataAccessObjectInterface;
 
     public static function getAdapterClassName(object $connection): string;
 

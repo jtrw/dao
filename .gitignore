@@ -1,3 +1,5 @@
 .idea/*
 vendor/*
 tests/reports/*
+.phpunit.cache/*
+coverage/*

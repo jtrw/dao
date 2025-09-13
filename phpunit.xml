@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         stopOnFailure="false">
+
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests/Src</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <coverage>
+        <report>
+            <clover outputFile="coverage/clover.xml"/>
+            <html outputDirectory="coverage/html"/>
+            <text outputFile="coverage/coverage.txt"/>
+        </report>
+    </coverage>
+
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <ini name="xdebug.mode" value="coverage" />
+        <env name="XDEBUG_MODE" value="coverage" />
+
+        <server name="SERVER_ADDR" value="127.0.0.1"/>
+
+        <const name="DB_DSN" value="mysql:dbname=dao;port=3306;host=dao_mariadb"/>
+        <const name="DB_NAME" value="dao"/>
+        <const name="DB_USER" value="dao_user"/>
+        <const name="DB_PASSWD" value="rootpw"/>
+    </php>
+
+    <logging>
+        <junit outputFile="tests/reports/phpunit.xml"/>
+    </logging>
+</phpunit>

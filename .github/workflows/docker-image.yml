@@ -31,7 +31,7 @@ jobs:
       run: make migrate
     
     - name: Phpunit
-      run: docker compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --coverage-clover=coverage.xml'
+      run: docker compose run --rm --no-deps dao_php sh -lc 'php ./vendor/phpunit/phpunit/phpunit -c ./phpunit.xml --testdox --stderr --coverage-clover=coverage.xml'
 
     - name: Send code coverage report to Codecov.io
       uses: codecov/codecov-action@v2

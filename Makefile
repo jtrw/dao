@@ -53,12 +53,12 @@ clean: ## Clear build vendor report folders
 
 .PHONY: migrate
 migrate:
-	docker-compose exec -T dao_mariadb sh /tmp/initdb/simple-db.sh
+	docker compose exec -T dao_mariadb sh /tmp/initdb/simple-db.sh
 	make migrate-pgsql
 
 .PHONY: migrate-pgsql
 migrate-pgsql:
-	docker-compose exec -T dao_postgres sh /tmp/initdb/simple-db.sh
+	docker compose exec -T dao_postgres sh /tmp/initdb/simple-db.sh
 
 .PHONY: tests
 tests: migrate migrate-pgsql run-tests

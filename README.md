@@ -10,9 +10,24 @@
 
 Data Access Object is tiny wrapper on php PDO. There was add more comfortable methods usage conditions in select query.
 
+## Installation
 
-PDO Usage
-===================
+Install via Composer:
+
+```bash
+composer require jtrw/dao
+```
+
+## Requirements
+
+- PHP >= 7.4
+- PDO extension
+- JSON extension
+- mbstring extension
+
+## Quick Start
+
+### Basic Setup
 
 ```php
 <?php
@@ -29,14 +44,58 @@ $db->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 $res = $db->query('SET NAMES utf8mb4');
 
 if (!$res) {
-    throw new Exception('Database connection error);
+    throw new Exception('Database connection error');
 }
 
 $db = DataAccessObject::factory($db);
 ```
 
-## Search
-```sql
+## API Documentation
+
+### Core Methods
+
+#### Insert
+```php
+// Insert single record
+$id = $db->insert('users', [
+    'name' => 'John Doe',
+    'email' => 'john@example.com'
+]);
+
+// Insert with duplicate key update
+$id = $db->insert('users', [
+    'name' => 'John Doe',
+    'email' => 'john@example.com'
+], true);
+```
+
+#### Update
+```php
+// Update records
+$db->update('users',
+    ['name' => 'Jane Doe'],
+    ['id' => 1]
+);
+```
+
+#### Delete
+```php
+// Delete records
+$db->delete('users', ['id' => 1]);
+```
+
+#### Mass Insert
+```php
+// Insert multiple records
+$data = [
+    ['name' => 'User 1', 'email' => 'user1@example.com'],
+    ['name' => 'User 2', 'email' => 'user2@example.com']
+];
+$db->massInsert('users', $data);
+```
+
+#### Select with Conditions
+```php
 $search = [
        'columnName'     => 5,
        'columnName2&IN' => [1, 2, 3, 4]
@@ -45,12 +104,43 @@ $search = [
      ];
 
 $sql = "SELECT * FROM users";
-$db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL)->toNative();
+$result = $db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL);
+$data = $result->toNative(); // Convert to native PHP array
 ```
 
+### Transaction Support
+```php
+// Manual transaction handling
+$db->begin();
+try {
+    $db->insert('users', ['name' => 'John']);
+    $db->insert('orders', ['user_id' => $db->getInsertID(), 'total' => 100]);
+    $db->commit();
+} catch (Exception $e) {
+    $db->rollback();
+    throw $e;
+}
+```
 
+### Utility Methods
+```php
+// Get tables list
+$tables = $db->getTables();
 
-### Conditions
+// Quote table/column names
+$quotedTable = $db->quoteTableName('user_data');
+$quotedColumn = $db->quoteColumnName('user-name');
+
+// Get database type
+$dbType = $db->getDatabaseType(); // mysql, pgsql, etc.
+
+// Check transaction status
+if ($db->inTransaction()) {
+    // Inside transaction
+}
+```
+
+## Search Conditions
 
 |    key           |    value                                                   |    result                                  |
 |------------------|------------------------------------------------------------|--------------------------------------------|
@@ -91,3 +181,45 @@ $db->select($sql, $search, [], DataAccessObjectInterface::FETCH_ALL)->toNative()
 `make tests` - run all tests with migrations
 
 `make run-tests` - run all tests without migrations
+
+## Troubleshooting
+
+### Common Issues
+
+#### Connection Problems
+```php
+// Ensure proper PDO configuration
+$pdo = new PDO($dsn, $username, $password, [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
+]);
+```
+
+#### Transaction Deadlocks
+- Use shorter transactions
+- Always handle exceptions in transactions
+- Consider using `SELECT ... FOR UPDATE` for critical sections
+
+#### Performance Tips
+- Use prepared statements for repeated queries
+- Consider using `massInsert()` for bulk operations
+- Use appropriate indexes on search columns
+
+### Supported Databases
+
+- **MySQL/MariaDB**: Full support with MySQL-specific features
+- **PostgreSQL**: Full support with PostgreSQL-specific features
+- **SQL Server**: Supported via MSSQL driver
+
+### Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Ensure all tests pass: `make tests`
+5. Submit a pull request
+
+### License
+
+MIT License - see LICENSE file for details.

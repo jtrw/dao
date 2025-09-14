@@ -5,6 +5,12 @@ RUN apk add --no-cache postgresql-dev
 RUN docker-php-ext-install pdo_pgsql
 RUN docker-php-ext-enable pdo_pgsql
 
+# Install Xdebug for code coverage
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && apk del .build-deps
+
 # php settings
 ADD conf.ini /usr/local/etc/php/conf.d/
 RUN chmod +r /usr/local/etc/php/conf.d/conf.ini

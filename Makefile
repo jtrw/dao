@@ -65,4 +65,4 @@ tests: migrate migrate-pgsql run-tests
 
 .PHONY: run-tests
 run-tests:
-	docker-compose -f $(CWD)/docker-compose.yml run --rm --no-deps dao_php sh -lc "php ./vendor/phpunit/phpunit/phpunit -c ./tests/phpunit.xml --testdox --stderr --colors"
+	docker-compose -f $(CWD)/docker-compose.yml run --rm --no-deps dao_php sh -lc "php ./vendor/phpunit/phpunit/phpunit -c ./phpunit.xml --testdox --stderr --colors"

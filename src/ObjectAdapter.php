@@ -293,30 +293,96 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      *
      * @param array|null $obj
      * @return array|mixed
+     * @throws DatabaseException
      */
     public function getSqlCondition(?array $obj = null): array
     {
         $result = [];
-        
+
         if ($obj === null) {
             return $result;
         }
-        
+
         foreach ($obj as $key => $item) {
             // XXX: if numeric then we get sql condition statement
             if (is_numeric($key)) {
+                // Security fix: Validate raw SQL conditions to prevent SQL injection
+                $this->_validateRawSqlCondition($item);
                 $conditionResult = $item;
             } else {
                 $conditionResult = $this->_getConditionResult($key, $item);
             }
-            
+
             if ($conditionResult) {
                 $result[] = $conditionResult;
             }
         }
-        
+
         return $result;
     } // end getSqlCondition
+
+    /**
+     * Validates raw SQL condition to prevent SQL injection attacks.
+     *
+     * This method implements a blacklist approach to block dangerous SQL keywords
+     * that could be used for SQL injection when numeric keys are used in conditions.
+     *
+     * @param string $condition Raw SQL condition string
+     * @throws DatabaseException If dangerous SQL keywords are detected
+     * @return void
+     */
+    private function _validateRawSqlCondition(string $condition): void
+    {
+        // Dangerous SQL keywords that should not appear in WHERE conditions
+        $dangerousKeywords = [
+            'DROP', 'DELETE', 'INSERT', 'UPDATE', 'TRUNCATE',
+            'EXEC', 'EXECUTE', 'ALTER', 'CREATE', 'GRANT',
+            'REVOKE', 'UNION', 'INFORMATION_SCHEMA', 'SLEEP',
+            'BENCHMARK', 'LOAD_FILE', 'OUTFILE', 'DUMPFILE',
+            'INTO', 'PROCEDURE', 'FUNCTION', '--', '/*', '*/',
+            'xp_', 'sp_', 'CHAR(', 'CHR(', 'CONCAT(',
+            '0x', 'WAITFOR'
+        ];
+
+        // Convert to uppercase for case-insensitive matching
+        $upperCondition = strtoupper($condition);
+
+        // Check for dangerous keywords
+        foreach ($dangerousKeywords as $keyword) {
+            $upperKeyword = strtoupper($keyword);
+            if (strpos($upperCondition, $upperKeyword) !== false) {
+                throw new DatabaseException(
+                    "Security violation: Dangerous SQL keyword '{$keyword}' detected in condition. ".
+                    "Raw SQL conditions with numeric keys must not contain data manipulation keywords."
+                );
+            }
+        }
+
+        // Check for excessive semicolons (multiple statements)
+        if (substr_count($condition, ';') > 0) {
+            throw new DatabaseException(
+                "Security violation: Multiple SQL statements detected (semicolon found). ".
+                "Raw SQL conditions must be single WHERE clause expressions only."
+            );
+        }
+
+        // Warn about suspicious patterns (not blocking, just validation)
+        $suspiciousPatterns = [
+            '/\s+OR\s+[\'"]?\d+[\'"]?\s*=\s*[\'"]?\d+[\'"]?/i', // OR 1=1
+            '/\s+OR\s+[\'"]?\w+[\'"]?\s*=\s*[\'"]?\w+[\'"]?/i', // OR 'a'='a'
+        ];
+
+        foreach ($suspiciousPatterns as $pattern) {
+            if (preg_match($pattern, $condition)) {
+                // This is a common SQL injection pattern, but might be legitimate
+                // Log warning but don't block (developer should use associative arrays instead)
+                error_log(
+                    "WARNING: Suspicious SQL pattern detected in raw condition: " . $condition .
+                    " - Consider using associative array conditions instead of numeric keys for better security."
+                );
+            }
+        }
+    } // end _validateRawSqlCondition
     
     /**
      * @param mixed $item
@@ -589,11 +655,39 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
                 $condition = $columnName." BETWEEN ".$this->quote($item[0]).
                     static::SQL_AND.$this->quote($item[1]);
             }
-            
+
         } else {
-            $condition = $columnName." BETWEEN ".$item;
+            // Security fix: Parse and quote string BETWEEN values to prevent SQL injection
+            if (!is_string($item)) {
+                throw new DatabaseException(
+                    "BETWEEN condition must be an array or a string in format 'value1 AND value2'"
+                );
+            }
+
+            // Parse "value1 AND value2" format
+            $parts = preg_split('/\s+AND\s+/i', $item, 2);
+
+            if (count($parts) !== 2) {
+                throw new DatabaseException(
+                    "Invalid BETWEEN condition format. Expected 'value1 AND value2', got: " . $item
+                );
+            }
+
+            // Trim and quote both values to prevent SQL injection
+            $value1 = trim($parts[0]);
+            $value2 = trim($parts[1]);
+
+            // Additional validation: check for suspicious patterns
+            if (preg_match('/[;\'"\\\\]/', $value1) || preg_match('/[;\'"\\\\]/', $value2)) {
+                throw new DatabaseException(
+                    "Security violation: BETWEEN values contain potentially dangerous characters"
+                );
+            }
+
+            $condition = $columnName." BETWEEN ".$this->quote($value1).
+                static::SQL_AND.$this->quote($value2);
         }
-        
+
         return $condition;
     } // end _getBetweenCondition
     

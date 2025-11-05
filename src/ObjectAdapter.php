@@ -333,24 +333,36 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
      */
     private function _validateRawSqlCondition(string $condition): void
     {
-        // Dangerous SQL keywords that should not appear in WHERE conditions
+        // Dangerous SQL keywords that should not appear as whole words in WHERE conditions
+        // Using word boundaries to avoid false positives (e.g., "created_at" contains "create")
         $dangerousKeywords = [
             'DROP', 'DELETE', 'INSERT', 'UPDATE', 'TRUNCATE',
             'EXEC', 'EXECUTE', 'ALTER', 'CREATE', 'GRANT',
-            'REVOKE', 'UNION', 'INFORMATION_SCHEMA', 'SLEEP',
-            'BENCHMARK', 'LOAD_FILE', 'OUTFILE', 'DUMPFILE',
-            'INTO', 'PROCEDURE', 'FUNCTION', '--', '/*', '*/',
-            'xp_', 'sp_', 'CHAR(', 'CHR(', 'CONCAT(',
-            '0x', 'WAITFOR'
+            'REVOKE', 'UNION', 'SLEEP', 'BENCHMARK',
+            'LOAD_FILE', 'OUTFILE', 'DUMPFILE', 'PROCEDURE', 'FUNCTION'
         ];
 
-        // Convert to uppercase for case-insensitive matching
-        $upperCondition = strtoupper($condition);
+        // Special patterns that don't need word boundaries
+        $specialPatterns = [
+            '/--/',                          // SQL comment
+            '/\/\*/',                        // Multi-line comment start
+            '/\*\//',                        // Multi-line comment end
+            '/\bxp_/i',                      // MSSQL system stored procedures
+            '/\bsp_/i',                      // MSSQL system stored procedures
+            '/\bINFORMATION_SCHEMA\b/i',     // Information schema
+            '/\bCHAR\s*\(/i',                // CHAR function
+            '/\bCHR\s*\(/i',                 // CHR function
+            '/\bCONCAT\s*\(/i',              // CONCAT for injection
+            '/\b0x[0-9a-f]+/i',              // Hex literals
+            '/\bWAITFOR\b/i',                // MSSQL WAITFOR
+            '/\bINTO\s+(OUTFILE|DUMPFILE)/i' // INTO OUTFILE/DUMPFILE
+        ];
 
-        // Check for dangerous keywords
+        // Check for dangerous keywords as whole words
         foreach ($dangerousKeywords as $keyword) {
-            $upperKeyword = strtoupper($keyword);
-            if (strpos($upperCondition, $upperKeyword) !== false) {
+            // Use word boundary regex for more accurate matching
+            $pattern = '/\b' . preg_quote($keyword, '/') . '\b/i';
+            if (preg_match($pattern, $condition)) {
                 throw new DatabaseException(
                     "Security violation: Dangerous SQL keyword '{$keyword}' detected in condition. ".
                     "Raw SQL conditions with numeric keys must not contain data manipulation keywords."
@@ -358,7 +370,17 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
             }
         }
 
-        // Check for excessive semicolons (multiple statements)
+        // Check for special dangerous patterns
+        foreach ($specialPatterns as $pattern) {
+            if (preg_match($pattern, $condition)) {
+                throw new DatabaseException(
+                    "Security violation: Dangerous SQL pattern detected in condition. ".
+                    "Raw SQL conditions with numeric keys must not contain potentially malicious patterns."
+                );
+            }
+        }
+
+        // Check for semicolons (multiple statements)
         if (substr_count($condition, ';') > 0) {
             throw new DatabaseException(
                 "Security violation: Multiple SQL statements detected (semicolon found). ".

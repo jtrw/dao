@@ -136,6 +136,102 @@ class SecurityTest extends TestCase
     }
 
     /**
+     * CVE-003: Test that column names containing dangerous keywords are allowed
+     * e.g., "created_at" contains "CREATE", "updated_at" contains "UPDATE"
+     */
+    public function testColumnNamesWithKeywordSubstrings()
+    {
+        // These should all pass - keywords are part of column names, not separate SQL keywords
+        $conditions = [
+            0 => "created_at > '2023-01-01'",       // contains "create"
+            1 => "updated_at < '2024-01-01'",       // contains "update"
+            2 => "deleted_flag = 0",                 // contains "delete"
+            3 => "execution_time < 1000",            // contains "exec"
+            4 => "grant_type = 'authorization'"     // contains "grant"
+        ];
+
+        $result = $this->db->getSqlCondition($conditions);
+
+        $this->assertIsArray($result);
+        $this->assertCount(5, $result);
+    }
+
+    /**
+     * CVE-003: Test that actual CREATE keyword as whole word is blocked
+     */
+    public function testCreateKeywordAsWholeWordBlocked()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessageMatches('/dangerous sql keyword.*CREATE/i');
+
+        $maliciousCondition = [
+            0 => "id = 1 OR CREATE TABLE evil"
+        ];
+
+        $this->db->getSqlCondition($maliciousCondition);
+    }
+
+    /**
+     * CVE-003: Test that actual UPDATE keyword as whole word is blocked
+     */
+    public function testUpdateKeywordAsWholeWordBlocked()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessageMatches('/dangerous sql keyword.*UPDATE/i');
+
+        $maliciousCondition = [
+            0 => "id = 1; UPDATE users SET role = 'admin'"
+        ];
+
+        $this->db->getSqlCondition($maliciousCondition);
+    }
+
+    /**
+     * CVE-003: Test SQL comment patterns are blocked
+     */
+    public function testSqlCommentBlocked()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessageMatches('/dangerous sql pattern/i');
+
+        $maliciousCondition = [
+            0 => "id = 1 -- comment out the rest"
+        ];
+
+        $this->db->getSqlCondition($maliciousCondition);
+    }
+
+    /**
+     * CVE-003: Test multiline comment patterns are blocked
+     */
+    public function testMultilineCommentBlocked()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessageMatches('/dangerous sql pattern/i');
+
+        $maliciousCondition = [
+            0 => "id = 1 /* comment */"
+        ];
+
+        $this->db->getSqlCondition($maliciousCondition);
+    }
+
+    /**
+     * CVE-003: Test hex literals are blocked (often used in injection)
+     */
+    public function testHexLiteralsBlocked()
+    {
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionMessageMatches('/dangerous sql pattern/i');
+
+        $maliciousCondition = [
+            0 => "id = 0x41646D696E"  // Hex for "Admin"
+        ];
+
+        $this->db->getSqlCondition($maliciousCondition);
+    }
+
+    /**
      * CVE-005: Test BETWEEN with malicious string injection
      */
     public function testBetweenMaliciousString()

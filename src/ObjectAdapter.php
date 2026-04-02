@@ -100,7 +100,14 @@ abstract class ObjectAdapter implements DataAccessObjectInterface
         
         $this->query($sql);
         
-        return $this->getInsertID();
+        try {
+            return $this->getInsertID();
+        } catch (\Exception $exp) {
+            if ($isUpdateDuplicate) {
+                return 0;
+            }
+            throw $exp;
+        }
     } // end insert
     
     /**
